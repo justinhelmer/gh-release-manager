@@ -1,0 +1,46 @@
+{
+  "name": "gh-release-manager",
+  "version": "0.0.0",
+  "description": "A variety of tools for managing github releases",
+  "keywords": [
+    "github",
+    "release",
+    "manage",
+    "jsdoc",
+    "documentation",
+    "generation",
+    "node",
+    "cli"
+  ],
+  "homepage": "https://github.com/justinhelmer/gh-release-manager",
+  "bugs": {
+    "url": "https://github.com/justinhelmer/gh-release-manager/issues",
+    "email": "jhelmer25@gmail.com"
+  },
+  "license": "MIT",
+  "author": "Justin Helmer jhelmer25@gmail.com",
+  "files": [
+    "bin"
+  ],
+  "main": "./index.js",
+  "bin": {
+    "gh-release-manager": "./bin/gh-release-manager.js",
+    "grm": "./bin/grm.js"
+  },
+  "repository": "justinhelmer/gh-release-manager",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "commander": "^2.9.0",
+    "commander.js-error": "^1.0.2",
+    "gulp": "^3.9.0",
+    "gulp-bump": "^1.0.0",
+    "gulp-exit": "0.0.2",
+    "gulp-util": "^3.0.7",
+    "lodash": "^4.1.0",
+    "node-clean-exit": "^0.2.1",
+    "node-spork": "^0.2.1"
+  },
+  "engines": {
+    "node": ">=4"
+  }
+}
