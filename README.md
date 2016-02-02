@@ -14,7 +14,15 @@ This project is currently in the `pre-alpha` phase. [Contributions](#contributio
 
 ## Installation
 
-`GitHub Release Manager` is currently intended to be installed _locally_, as assets are placed in the root of the project, relative to `gh-release-manager` itself.
+`GitHub Release Manager` can be installed _locally_ or _globally_, and includes both a `node` module interface and a command-line interface (`CLI`).
+
+### Install globally
+
+```bash
+$ npm install --global gh-release-manager   # links to node/.bin (avalable everywhere) 
+```
+
+### Install locally
 
 ```bash
 $ npm install --save gh-release-manager
@@ -40,6 +48,7 @@ Currently, the options are shared across sub-commands, although that will likely
 
 The complete list is currently limited to:
 
+- **paths** _{object}_ - Specify the paths for the `jsdoc`, the extract location for `releases`, and the parse output location for `docs`. If not specified, things will be output relative the `gh-version-manager` directory, which is likely not intended behavior. 
 - **quiet** _{boolean}_ - Suppress all output (`STDOUT` and `STDERR`). Defaults to `false`.
 - **verbose** _{mixed}_ - Show more output. Can be `true`, `false`, or a number to specify the _[verbosity]_ level.
 
