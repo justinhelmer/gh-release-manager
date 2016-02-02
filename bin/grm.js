@@ -3,7 +3,7 @@
   'use strict';
 
   require('commander')
-      .version('0.0.3')
+      .version('0.0.4')
       .description('Description:\n\n    ' + 'A variety of tools for managing github tags/releases.\n\n    ' +
           'If [command] is excluded, `suite` is run by default.\n    ' +
           'For command-specific options. Use `help [command]` for details.')
