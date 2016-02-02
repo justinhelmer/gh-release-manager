@@ -3,5 +3,5 @@
   'use strict';
 
   var program = require('../lib/program');
-  require('node-alias')('grm', __dirname, {message: !program.quiet});
+  require('node-alias')('grm jsdoc', __dirname, {message: !program.quiet});
 })();

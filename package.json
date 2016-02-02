@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A variety of tools for managing github releases",
   "keywords": [
     "github",
@@ -20,7 +20,8 @@
   "license": "MIT",
   "author": "Justin Helmer jhelmer25@gmail.com",
   "files": [
-    "bin"
+    "bin",
+    "lib"
   ],
   "main": "./index.js",
   "bin": {
@@ -29,18 +30,24 @@
   },
   "repository": "justinhelmer/gh-release-manager",
   "dependencies": {
+    "bluebird": "^3.2.1",
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
-    "commander.js-error": "^1.0.2",
+    "commander.js-error": "^1.1.0",
     "gulp": "^3.9.0",
     "gulp-bump": "^1.0.0",
     "gulp-exit": "0.0.2",
     "gulp-util": "^3.0.7",
-    "lodash": "^4.1.0",
+    "inquirer": "^0.11.4",
+    "jsdoc": "^3.4.0",
+    "lodash": "^4.2.0",
+    "node-alias": "^1.0.2",
     "node-clean-exit": "^0.2.1",
-    "node-spork": "^0.2.1"
+    "request": "^2.69.0",
+    "spork": "^0.3.1",
+    "tar.gz": "^1.0.2"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=0.12"
   }
 }
