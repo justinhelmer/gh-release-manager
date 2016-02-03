@@ -45,14 +45,32 @@ $ grm
 
 ## Options
 
-The complete list is currently limited to:
+Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same.
+
+Additionally, a path can be provided using `opts` to point to a configuration file for parsing.
+If `opts` is not provided, `GitHub Release Manager` will look in the current working directory for a file called `grm.opts`.
+
+The `grm.opts` file should be in the following format (example `grm.opts` file):
+
+```
+--docs _sass
+--keep releases
+--path lib/module.js
+--recent 5
+--quiet false
+--verbose 2
+```
+
+Note that `grm.opts` must use the _long_ format of the option (i.e. `-d`, `-k`, etc. **will be igored**).
+
+Here is the complete list of available options:
 
 - **docs** _{string}_ - Specify the output directory for the parsed `JSDoc` `markdown` files. 
 - **keep** _{string}_ - The path to where releases should be stored. They are deleted by default after the process succeeds.
 - **path** _{string}_ - The relative path to the file to parse; assumes the same relative path for all releases.
 - **recent** _{number}_ - Specify the number of recent releases to fetch. Without specifying, will grab the default amount.
 - **quiet** _{boolean}_ - Suppress all output (`STDOUT` and `STDERR`). Defaults to `false`.
-- **verbose** _{mixed}_ - Show more output. Can be `true`, `false`, or a number to specify the _[verbosity]_ level.
+- **verbose** _{mixed}_ - Show more output. Can be `true`, `false`, or a number to specify the _verbosity level_.
 
 ## Contributing
 

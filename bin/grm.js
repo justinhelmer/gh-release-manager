@@ -8,17 +8,31 @@
   var grm = require('../index');
   var program = require('commander');
 
-  program.version('0.0.5')
-      .description('Description:\n\n    Download releases, generate documentation, build site, deploy.\n\n')
+  program.version('0.0.6')
+      .description('Description:\n\n    Download releases, generate documentation, build site, deploy.')
+      .option('-o, --opts [path]', 'the path to a conf file; cli args take precedence')
       .option('-d, --docs [path]', 'the path to output documentation; defaults to ../docs')
-      .option('-k, --keep [path]', 'the path to where releases should be kept; else they are cleaned up')
-      .option('-p, --path [path]', 'relative path to the file to parse; assumes index.js')
-      .option('-r, --recent <n>', 'only parse documentation for the <n> most recent releases')
+      .option('-k, --keep [path]', 'the path to keep releases; else they are removed')
+      .option('-p, --path [path]', 'release-relative path to the JSDoc file; assumes index.js')
       .option('-q, --quiet', 'output nothing (suppress STDOUT and STDERR)')
-      .option('-v, --verbose [verbosity]', 'output more; optional number (i.e. 2) for even more', false)
+      .option('-r, --recent <n>', 'only parse documentation for the <n> most recent releases')
+      .option('-v, --verbose [n]', 'true for more output; higher number (ie 2) for even more', false)
       .parse(process.argv);
 
-  grm('release', _.pick(program, ['docs', 'keep', 'path', 'recent', 'verbose']))
+  var options = ['docs', 'keep', 'path', 'quiet', 'recent', 'verbose'];
+
+  /**
+   * When `--opts` is set, everything is great. It is great because it overrides default behavior from
+   * Commander.prototype.opts: https://github.com/tj/commander.js/blob/master/index.js#L733
+   *
+   * However, when it is not, the property should be ignored. This is easily identifiable.
+   * Maybe not the best idea to use `--opts`, but it is cohesive with other libs (i.e. mocha).
+   */
+   if (!_.isFunction(program.opts)) {
+     options.push('opts');
+   }
+
+   grm('release', _.pick(program, options))
       .then(function() {
         if (!program.quiet) {
           console.log('\n' + chalk.green('Success') + '; exiting.');

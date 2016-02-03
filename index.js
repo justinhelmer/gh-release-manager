@@ -24,24 +24,51 @@
     op = op || 'release';
 
     if (_.isFunction(actions[op])) {
-      return actions[op](options).then(function() {
-        if (!options.keep) {
-          var tmpDir = path.resolve(__dirname, 'lib/tmp');
-
-          if (!options.quiet) {
-            console.log('\n' + chalk.blue('Cleaning up...'));
-
-            if (options.verbose) {
-              console.log(chalk.blue('Deleting'), tmpDir);
-            }
-          }
-
-          deleteFolderRecursive(tmpDir);
-        }
-      });
+      return prepareOptions().then(actions[op]).then(cleanup);
     }
 
     return Promise.reject(new Error('unknown op: \'' + op + '\''));
+
+    function cleanup() {
+      if (!options.keep) {
+        var tmpDir = path.resolve(__dirname, 'lib/tmp');
+
+        if (!options.quiet) {
+          console.log('\n' + chalk.blue('Cleaning up...'));
+
+          if (options.verbose) {
+            console.log(chalk.blue('Deleting'), tmpDir);
+          }
+        }
+
+        deleteFolderRecursive(tmpDir);
+      }
+    }
+
+    function prepareOptions() {
+      return new Promise(function(resolve, reject) {
+        var optsPath = path.resolve(options.opts || 'grm.opts');
+
+        fs.readFile(optsPath, function(err, file) {
+          if (err) {
+            reject(err);
+          } else {
+            var args = file.toString('utf8').split('\n');
+            _.each(args, function(arg) {
+              var kv = _.compact(arg.split(/\s+/));
+              var key = (kv[0] || '').replace('--', '');
+              var value = kv.length == 2 ? kv[1] : true; // simple switches should represent the boolean value `true`
+
+              if (key && value && !options[key]) { // allow CLI args to take precedence
+                options[key] = value;
+              }
+            });
+
+            resolve(options);
+          }
+        });
+      });
+    }
   }
 
   function deleteFolderRecursive(path) {
