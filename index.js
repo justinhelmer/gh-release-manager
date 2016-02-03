@@ -6,6 +6,7 @@
   var fs = require('fs');
   var path = require('path');
   var Promise = require('bluebird');
+  var cleanup = require('./lib/cleanup');
 
   var actions = {
     release: require('./lib/release')
@@ -24,26 +25,10 @@
     op = op || 'release';
 
     if (_.isFunction(actions[op])) {
-      return prepareOptions().then(actions[op]).then(cleanup);
+      return prepareOptions().then(actions[op]).then(_.partial(cleanup, options));
     }
 
     return Promise.reject(new Error('unknown op: \'' + op + '\''));
-
-    function cleanup() {
-      if (!options.keep) {
-        var tmpDir = path.resolve(__dirname, 'lib/tmp');
-
-        if (!options.quiet) {
-          console.log('\n' + chalk.blue('Cleaning up...'));
-
-          if (options.verbose) {
-            console.log(chalk.blue('Deleting'), tmpDir);
-          }
-        }
-
-        deleteFolderRecursive(tmpDir);
-      }
-    }
 
     function prepareOptions() {
       return new Promise(function(resolve, reject) {
@@ -68,22 +53,6 @@
           }
         });
       });
-    }
-  }
-
-  function deleteFolderRecursive(path) {
-    if (fs.existsSync(path)) {
-      _.each(fs.readdirSync(path), function(file, index) {
-        var curPath = path + '/' + file;
-
-        if (fs.lstatSync(curPath).isDirectory()) {
-          deleteFolderRecursive(curPath);
-        } else {
-          fs.unlinkSync(curPath);
-        }
-      });
-
-      fs.rmdirSync(path);
     }
   }
 
