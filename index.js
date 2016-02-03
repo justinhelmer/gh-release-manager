@@ -21,7 +21,6 @@
    *                               For invalid actions, the promise is rejected with an Error.
    */
   function grm(op, options) {
-    options = options || {};
     op = op || 'release';
 
     if (_.isFunction(actions[op])) {
@@ -32,8 +31,20 @@
 
     function prepareOptions() {
       return new Promise(function(resolve, reject) {
-        var optsPath = path.resolve(options.opts || 'grm.opts');
+        options = options || {};
 
+        /**
+         * When used via the CLI, there is a risk of `--opts` not being valid. When set, everything is great. It is great
+         * because it overrides default behavior from Commander.prototype.opts: https://github.com/tj/commander.js/blob/master/index.js#L733
+         *
+         * However, when it is not, the property should be ignored. This is easily identifiable.
+         * Maybe not the best idea to use `--opts`, but it is cohesive with other libs (i.e. mocha).
+         */
+        if (_.isFunction(options.opts)) {
+          options.opts = false;
+        }
+
+        var optsPath = path.resolve(options.opts || 'grm.opts');
         fs.readFile(optsPath, function(err, file) {
           if (err) {
             reject(err);
@@ -44,7 +55,7 @@
               var key = (kv[0] || '').replace('--', '');
               var value = kv.length == 2 ? kv[1] : true; // simple switches should represent the boolean value `true`
 
-              if (key && value && !options[key]) { // allow CLI args to take precedence
+              if (key && value && !options[key]) { // allow CLI args to override options from grm.opts
                 options[key] = value;
               }
             });

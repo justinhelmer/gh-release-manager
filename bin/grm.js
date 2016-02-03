@@ -15,24 +15,12 @@
       .option('-k, --keep [path]', 'the path to keep releases; else they are removed')
       .option('-p, --path [path]', 'release-relative path to the JSDoc file; assumes index.js')
       .option('-q, --quiet', 'output nothing (suppress STDOUT and STDERR)')
-      .option('-r, --recent <n>', 'only parse documentation for the <n> most recent releases')
+      .option('-r, --repo [repo]', 'in the format \'org/repo\'; if not set, will be prompted')
+      .option('-t, --top <n>', 'only parse docs for the top <n> most recent releases')
       .option('-v, --verbose [n]', 'true for more output; higher number (ie 2) for even more', false)
       .parse(process.argv);
 
-  var options = ['docs', 'keep', 'path', 'quiet', 'recent', 'verbose'];
-
-  /**
-   * When `--opts` is set, everything is great. It is great because it overrides default behavior from
-   * Commander.prototype.opts: https://github.com/tj/commander.js/blob/master/index.js#L733
-   *
-   * However, when it is not, the property should be ignored. This is easily identifiable.
-   * Maybe not the best idea to use `--opts`, but it is cohesive with other libs (i.e. mocha).
-   */
-   if (!_.isFunction(program.opts)) {
-     options.push('opts');
-   }
-
-   grm('release', _.pick(program, options))
+  grm('release', _.pick(program, ['docs', 'keep', 'opts', 'path', 'quiet', 'recent', 'verbose']))
       .then(function() {
         if (!program.quiet) {
           console.log('\n' + chalk.green('Success') + '; exiting.');
