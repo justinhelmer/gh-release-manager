@@ -22,7 +22,7 @@ This project is currently in the `pre-alpha` phase. [Contributions](#contributio
 ### Install globally
 
 ```bash
-$ npm install --global gh-release-manager   # links to node/.bin (avalable everywhere) 
+$ npm install --global gh-release-manager   # avalable everywhere 
 ```
 
 ### Install locally
@@ -30,9 +30,9 @@ $ npm install --global gh-release-manager   # links to node/.bin (avalable every
 ```bash
 $ npm install --save gh-release-manager
 
-# optionally link the script to node/.bin
+# optionally link the script to node_modules/gh-release-manager
 # (does NOT install the module globally)
-$ npm link && npm link gh-release-manager
+$ cd node_modules/gh-release-manager && npm link
 ```
 
 ## Usage
