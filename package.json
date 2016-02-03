@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A variety of tools for managing github releases",
   "keywords": [
     "github",
