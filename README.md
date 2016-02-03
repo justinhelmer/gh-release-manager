@@ -1,12 +1,16 @@
 # GitHub Release Manager
-A variety of tools for managing github releases
+Download releases, generate documentation, deploy
 
 [![npm package](https://badge.fury.io/js/gh-release-manager.svg)](https://www.npmjs.com/package/gh-release-manager)
 [![node version](https://img.shields.io/node/v/gh-release-manager.svg?style=flat)](http://nodejs.org/download/)
 [![dependency status](https://david-dm.org/justinhelmer/gh-release-manager.svg)](https://github.com/justinhelmer/gh-release-manager)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/justinhelmer/gh-release-manager/issues)
 
-The `gh-release-manager` exists to try to make it easier to manage release tags on `GitHub`. It includes a suite of tools for downloading, extracting, parsing documentation using [JSDoc](http://usejsdoc.org/), among other things as well.
+The `gh-release-manager` exists to try to make it easier to manage release tags on `GitHub`. By running one command, you can:
+
+1) Download all the recent releases to a temporary directory, by fetching them via the [GitHub API](https://developer.github.com/v3/).
+2) Parse the [JSDoc](http://usejsdoc.org/) head documentation of all latest releases and generate output in the form of `markdown`. 
+3) Deploy to [GitHub Pages](https://pages.github.com/) <------ Not yet implemented
 
 #### WARNING
 
@@ -15,7 +19,6 @@ This project is currently in the `pre-alpha` phase. [Contributions](#contributio
 ## Installation
 
 `GitHub Release Manager` can be installed _locally_ or _globally_, and includes both a `node` module interface and a command-line interface (`CLI`).
-
 ### Install globally
 
 ```bash
@@ -34,57 +37,22 @@ $ npm link && npm link gh-release-manager
 
 ## Usage
 
-The manual can be seen by using:
+Do it all in one go:
 
 ```
-$ grm --help
+$ grm
 ```
-
-This will display all of the [sub-commands](#sub-commands).
 
 ## Options
 
-Currently, the options are shared across sub-commands, although that will likely change once the module has matured a bit more.
-
 The complete list is currently limited to:
 
-- **paths** _{object}_ - Specify the paths for the `jsdoc`, the extract location for `releases`, and the parse output location for `docs`. If not specified, things will be output relative the `gh-version-manager` directory, which is likely not intended behavior. 
+- **docs** _{string}_ - Specify the output directory for the parsed `JSDoc` `markdown` files. 
+- **keep** _{string}_ - The path to where releases should be stored. They are deleted by default after the process succeeds.
+- **path** _{string}_ - The relative path to the file to parse; assumes the same relative path for all releases.
+- **recent** _{number}_ - Specify the number of recent releases to fetch. Without specifying, will grab the default amount.
 - **quiet** _{boolean}_ - Suppress all output (`STDOUT` and `STDERR`). Defaults to `false`.
 - **verbose** _{mixed}_ - Show more output. Can be `true`, `false`, or a number to specify the _[verbosity]_ level.
-
-## Sub-commands
-
-`GitHub Release Manager` is essentially a container of different `plugins`. These `plugins` individually serve their own purpose. However, the entire suite can still be run by using `grm suite`.
-
-The complete list of available sub-commands exists below.
-
-### grm-download(1)
-
-```
-$ grm download
-```
-
-Download & extract assets for all recent tags that have been published to `GitHub`. Excludes all releases that are not in the format `[v]X.X.X`, i.e. `1.2.3` or `v1.2.3`.
-
-All downloaded releases will be output in the `/releases` directory.
-
-### grm-jsdoc(1)
-
-```
-$ grm jsdoc
-```
-
-Parse the [JSDoc](http://usejsdoc.org/) headers for all releases that exist in the `/releases` directory.
-
-All parsed documentation will be output in the `/docs` directory.
-
-### grm-suite(1)
-
-```
-$ grm suite
-```
-
-As mentioned earlier, the only purpose of `grm-suite(1)` is to run all sub-commands in the order they are set up.
 
 ## Contributing
 
