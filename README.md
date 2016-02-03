@@ -73,8 +73,8 @@ Here is the complete list of available options:
 - **keep** _{string}_ - The path to where releases should be stored. They are deleted by default after the process succeeds.
 - **path** _{string}_ - The relative path to the file to parse; assumes the same relative path for all releases.
 - **quiet** _{boolean}_ - Suppress all output (`STDOUT` and `STDERR`). Defaults to `false`.
-- **recent** _{number}_ - Specify the number of recent releases to fetch. Without specifying, will grab the default amount.
-- **repo** _{string}_ - The repository to fetch releases for via the [GitHub Tags API](https://developer.github.com/v3/git/tags/). If not set, will be prompted.
+- **repo** _{string}_ - The repository to fetch releases for (in the format `org/repo`) via the [GitHub Tags API](https://developer.github.com/v3/git/tags/). If not set, will be prompted.
+- **top** _{number}_ - Specify the number of recent releases to fetch. Without specifying, will grab the default amount.
 - **verbose** _{mixed}_ - Show more output. Can be `true`, `false`, or a number to specify the _verbosity level_.
 
 ## Contributing
