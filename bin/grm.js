@@ -8,7 +8,7 @@
   var grm = require('../index');
   var program = require('commander');
 
-  program.version('0.2.0')
+  program.version('0.2.1')
       .description('Description:\n\n    Download releases, generate documentation, build site, deploy.')
       .option('-o, --opts [path]', 'the path to a conf file; cli args take precedence')
       .option('-d, --docs [path]', 'the path to output documentation; defaults to ../docs')
