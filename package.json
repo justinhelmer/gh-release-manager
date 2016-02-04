@@ -1,16 +1,17 @@
 {
   "name": "gh-release-manager",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
-    "release",
-    "manage",
-    "jsdoc",
     "documentation",
-    "generation",
-    "node",
-    "cli"
+    "static",
+    "pages",
+    "jekyll",
+    "site",
+    "eslint",
+    "jscs",
+    "node"
   ],
   "homepage": "https://github.com/justinhelmer/gh-release-manager",
   "bugs": {
