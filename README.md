@@ -12,10 +12,6 @@ The `gh-release-manager` exists to try to make it easier to manage release tags 
 2) Parse the [JSDoc](http://usejsdoc.org/) head documentation of all latest releases and generate output in the form of `markdown`. 
 3) Deploy to [GitHub Pages](https://pages.github.com/) <------ Not yet implemented
 
-#### WARNING
-
-This project is currently in the `pre-alpha` phase. [Contributions](#contributions) are welcome and encouraged, but understand there will be bugs.
-
 ## Installation
 
 `GitHub Release Manager` can be installed _locally_ or _globally_, and includes both a `node` module interface and a command-line interface (`CLI`).
