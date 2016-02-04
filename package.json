@@ -40,7 +40,8 @@
     "mkdirp": "^0.5.1",
     "node-alias": "^1.0.2",
     "node-clean-exit": "^0.2.1",
-    "request": "^2.69.0"
+    "request": "^2.69.0",
+    "tildify": "^1.1.2"
   },
   "engines": {
     "node": ">=0.12"
