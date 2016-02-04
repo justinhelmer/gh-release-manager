@@ -8,9 +8,9 @@ Download releases, generate documentation, deploy
 
 The `gh-release-manager` exists to try to make it easier to manage release tags on `GitHub`. By running one command, you can:
 
-1) Download all the recent releases to a temporary directory, by fetching them via the [GitHub API](https://developer.github.com/v3/).
-2) Parse the [JSDoc](http://usejsdoc.org/) head documentation of all latest releases and generate output in the form of `markdown`. 
-3) Deploy to [GitHub Pages](https://pages.github.com/) <------ Not yet implemented
+1. Download all the recent releases to a temporary directory, by fetching them via the [GitHub API](https://developer.github.com/v3/).
+2. Parse the [JSDoc](http://usejsdoc.org/) head documentation of all latest releases and generate output in the form of `markdown`.
+3. Deploy to [GitHub Pages](https://pages.github.com/) <------ Not yet implemented
 
 ## Installation
 
