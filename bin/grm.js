@@ -3,7 +3,7 @@
   'use strict';
 
   require('commander')
-      .version('0.3.0')
+      .version('0.3.5')
       .description('Description:\n\n    Download releases, generate documentation, build website, deploy, relax.')
       .command('download', 'download recent releases via the GitHub Tags API')
       .command('jsdoc', 'parse JSDoc headers for locally-downloaded releases')
