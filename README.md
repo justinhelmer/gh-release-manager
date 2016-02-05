@@ -57,11 +57,11 @@ Do it all in one go:
 $ grm
 ```
 
-Or, run one of the [sub-commands](#sub-commands).
+Or, run one of the [sub commands](#sub-commands).
 
 ### Sub commands
 
-Although it is often most convenient to [do it all in one go](#usage), there may be a use case that involves running the steps individually (i.e. debugging, dry runs, etc). For that reason, `GRM` is a colection of `Git` style sub-commands. By default, if no `command` is specified, [grm-release(1)](#grm-release1) is run by default.
+Although it is often most convenient to [do it all in one go](#usage), there may be a use case that involves running the steps individually (i.e. debugging, dry runs, etc). For that reason, `GRM` is a collection of `Git` style sub commands. By default, if no `command` is specified, [grm-release(1)](#grm-release1) is run by default.
 
 Every command has a `help` file. Simply run:
 
@@ -145,7 +145,7 @@ $ grm # alias
 
 **[all options](#options) available**
 
-As mentioned earlier, `grm-release(1)` is the default command run when no [sub-command](#sub-command) is specified. This will run all of the sub-commands in the following order:
+As mentioned earlier, `grm-release(1)` is the default command run when no [sub command](#sub-command) is specified. This will run all of the sub commands in the following order:
 
 1. [grm-download(1)](#grm-download1)
 2. [grm-jsdoc(1)](#grm-jsdoc1)
@@ -155,7 +155,7 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub-c
 
 ## Node interface
 
-`GRM` also includes a `node` interface, which works the same way as the [CLI](#cli). All of the available [options](#options) are the same, and the interface can run any of the [sub-commands](#sub-commands). For example:
+`GRM` also includes a `node` interface, which works the same way as the [CLI](#cli). All of the available [options](#options) are the same, and the interface can run any of the [sub commands](#sub-commands). For example:
 
 ```js
 const grm = require('gh-release-manager');
@@ -199,7 +199,7 @@ grm('download', options)
 
 #### command
 
-_{string}_ The `GRM` [sub-command](#sub-commands) to run.
+_{string}_ The `GRM` [sub command](#sub-commands) to run.
 
 #### description
 
@@ -217,16 +217,17 @@ For example:
   'use strict';
   
   const grm = require('gh-release-manager');
+  const desc = 'Download the top <n> recent releases for the "foo/bar" project and store them in [k]';
   
-  grm.cli('download', 'Download the top <n> recent releases for the "foo/bar" project', ['n']);
+  grm.cli('download', desc, ['n', 'k']);
 })();
 ```
 
-When using the `CLI adapter`, `GRM` will always check for a `grm.opts` file. This way, a custom command-line program can specify project-level defaults for [options](#options), and expose _only_ the options that should be configurable by the program consumer.
+When using the `CLI adapter`, `GRM` will always check for a [grm.opts](#grmopts) file. This way, a custom command-line program can specify project-level defaults for [options](#options), and expose _only_ the options that should be configurable by the program consumer.
 
 ## Options
 
-Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. Many of the options are common across the [sub-commands](#sub-commands). For that reason, they are documented as an aggregate list:
+Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. Many of the options are common across the [sub commands](#sub-commands). For that reason, they are documented as an aggregate list:
 
 #### opts
 
