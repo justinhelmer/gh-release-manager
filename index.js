@@ -44,5 +44,9 @@
     return Promise.reject(new Error('unknown op: \'' + op + '\''));
   }
 
+  grm.cli = function() {
+    require('./lib/cliAdapter').apply(null, arguments);
+  };
+
   module.exports = grm;
 })();
