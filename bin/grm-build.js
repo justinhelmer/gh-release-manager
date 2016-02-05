@@ -2,6 +2,6 @@
 (function() {
   'use strict';
 
-  require('../lib/cliAdapter')('build', 'Build the markdown files to HTML using Jekyll.', ['o', 'q', 'v']);
+  require('../lib/cliAdapter')('build', 'Build the markdown files to HTML using Jekyll.', ['q', 'v']);
 })();
 
