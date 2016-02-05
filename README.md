@@ -217,7 +217,8 @@ For example:
   'use strict';
   
   const grm = require('gh-release-manager');
-  const desc = 'Download the top <n> recent releases for the "foo/bar" project and store them in [k]';
+  const desc = 'Download the top <n> recent releases for' +
+      'the "foo/bar" project' + and store them in [k]';
   
   grm.cli('download', desc, ['n', 'k']);
 })();
