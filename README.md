@@ -10,7 +10,7 @@ The `GitHub Release Manager` automates the process of building a website and doc
 
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
 2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate output in the form of `markdown`.
-3. Use [Gulp](http://gulpjs.com/) to enforce code quality standards with [ESLint](http://eslint.org/docs/user-guide/getting-started) and code style standards with [JSCS](http://jscs.info/). **_not yet implemented_**
+3. Run code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started).
 4. Use [Jeyll](https://jekyllrb.com/) to build a static website and generate documentation `HTML`. **_not yet implemented_**
 5. Deploy to [GitHub Pages](https://pages.github.com/). **_not yet implemented_**
 
@@ -126,13 +126,15 @@ The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://us
 
 #### grm-lint(1)
 
-> Run code quality and code style linting.
+> Run code quality check using ESLint.
 
 ```bash
 $ grm lint
 ```
 
-**Coming soon!**
+When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/) configuration file in the _current working directory_. It will accept either an `.eslintrc` file, or `.eslintrc.js` file. If the file does not exist, a warning will be displayed, but the task will not exit with an error.
+
+It then uses [Gulp](http://gulpjs.com/) to run `ESLint` with the supplied configuration against **all** `JavaScript` files with the exception of the `node_modules/` folder. `Gulp` and `ESLint` are both used programmatically, and thus **do not** need to be globally installed.
 
 #### grm-release(1)
 
@@ -149,7 +151,7 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub c
 
 1. [grm-download(1)](#grm-download1)
 2. [grm-jsdoc(1)](#grm-jsdoc1)
-3. [grm-lint(1)](#grm-lint1) **_not yet implemented_**
+3. [grm-lint(1)](#grm-lint1)
 4. [grm-build(1)](#grm-build1) **_not yet implemented_**
 5. [grm-deploy(1)](#grm-deploy1) **_not yet implemented_**
 
@@ -217,10 +219,9 @@ For example:
   'use strict';
   
   const grm = require('gh-release-manager');
-  const desc = 'Download the top <n> recent releases for' +
-      'the "foo/bar" project and store them in [k]';
+  const desc = 'Download the top <t> recent releases for "foo/bar" project and store them in [k]';
   
-  grm.cli('download', desc, ['n', 'k']);
+  grm.cli('download', desc, ['t', 'k']);
 })();
 ```
 
