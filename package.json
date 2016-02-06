@@ -22,7 +22,8 @@
   "author": "Justin Helmer jhelmer25@gmail.com",
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "gulpfile.js"
   ],
   "main": "./index.js",
   "bin": {
