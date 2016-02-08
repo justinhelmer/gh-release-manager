@@ -11,12 +11,13 @@ The `GitHub Release Manager` automates the process of building a website and doc
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
 2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate output in the form of `markdown`.
 3. Run code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started).
-4. Use [Jeyll](https://jekyllrb.com/) to build a static website and generate documentation `HTML`. **_not yet implemented_**
+4. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
 5. Deploy to [GitHub Pages](https://pages.github.com/). **_not yet implemented_**
 
 ## Installation
 
 `GitHub Release Manager` (`GRM`) can be installed _locally_ or _globally_, and includes both a [node interface](#node-interface) and a command-line interface ([CLI](#cli)). It also includes a [CLI adapter](#cli-adapter) to easily integrate the [node interface](#node-interface) into any existing `node`-based command-line program.
+
 ### Install globally
 
 ```bash
@@ -73,13 +74,40 @@ This will display the information about the command, including all of the availa
 
 #### grm-build(1)
 
-> Build all markdown files (documentation and website) to HTML using Jekyll.
+> Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
 
 ```bash
 $ grm build
 ```
 
-**Coming soon!**
+`GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `Gulp` pipeline for exceptional performance.
+
+To take advantage of this toolset, get familiar with [Handlebars](http://handlebarsjs.com/) which is used as the templating engine, and [Sass](http://sass-lang.com/) which is the included `CSS` preprocessor.
+
+Then, all you need to do is to start creating files according to the expected directory structure:
+
+```
+- node_modules
+    - gh-release-manager    # this module
+- source                    # any .md files can be placed in source/**
+    - css                   # all scss files go here
+    - layouts               # all handlebars templates go here
+    - partials              # all handlebars partials go here
+- .eslintrc.js              # see grm-lint(1)
+- grm.opts                  # see grm.opts()
+```
+
+The `markdown` files will also be parsed for [YAML Front Matter](https://github.com/dworthen/js-yaml-front-matter), and the data is passed to the template and made available to `handlebars`. Additionally, the following `Front Matter` attribute(s) have special meaning:
+
+```
+---
+layout: page.html           # from source/layouts - defaults to page.html
+---
+```
+
+Finally, the `{{{content}}}` variable is made available to the `handlebars` templates, and contanins the [markdown](https://github.com/chjj/marked)-generated `HTML`.
+
+See the [lodocs](https://github.com/justinhelmer/lodocs) project for an example implementation of `gh-release-manager`.
 
 #### grm-deploy(1)
 
@@ -132,9 +160,37 @@ The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://us
 $ grm lint
 ```
 
-When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/) configuration file in the _current working directory_. It will accept either an `.eslintrc` file, or `.eslintrc.js` file. If the file does not exist, a warning will be displayed, but the task will not exit with an error.
+**available [options](#options):** [_quiet_](#quiet), [_verbose_](#verbose)
+
+When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/) configuration file in the _current working directory_. It will accept any valid `ESLint` configuration file:
+
+- .eslintrc.js
+- .eslintrc.yaml
+- .eslintrc.yml
+- .eslintrc.json
+- .eslintrc
+
+If the file does not exist, a warning will be displayed, but the task will not exit with an error.
 
 It then uses [Gulp](http://gulpjs.com/) to run `ESLint` with the supplied configuration against **all** `JavaScript` files with the exception of the `node_modules/` folder. `Gulp` and `ESLint` are both used programmatically, and thus **do not** need to be globally installed.
+
+Note that because `ESLint` is installed as a dependency of `GRM`, the [extends](http://eslint.org/docs/user-guide/configuring#extending-configuration-files) features of `ESLint` will only work for configuration packages that have been added to _this_ project, or the `ESLint`-recommended config.
+
+Currently, the list of supported pre-build configs includes:
+
+1. [eslint-config-google](https://www.npmjs.com/package/eslint-config-google)
+2. [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)
+3. [eslint-config-react](https://www.npmjs.com/package/eslint-config-react)
+
+i.e.:
+
+```js
+module.exports = {
+  extends: 'google'
+};
+```
+
+Attempting to use other pre-built configs will result in an error, even if included in your projec'ts `package.json`. If there is a pre-built config that you would like included with `GRM`, just let me know or submit a `pull request`.
 
 #### grm-release(1)
 
@@ -152,7 +208,7 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub c
 1. [grm-download(1)](#grm-download1)
 2. [grm-jsdoc(1)](#grm-jsdoc1)
 3. [grm-lint(1)](#grm-lint1)
-4. [grm-build(1)](#grm-build1) **_not yet implemented_**
+4. [grm-build(1)](#grm-build1)
 5. [grm-deploy(1)](#grm-deploy1) **_not yet implemented_**
 
 ## Node interface
