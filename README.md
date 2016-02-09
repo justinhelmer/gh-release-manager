@@ -279,7 +279,7 @@ grm('download', options)
 
 `GRM` also includes a [CLI adapter](#cli-adapter) to easily integrate the [node interface](#node-interface) into any exiting `node`-based command-line program. It uses [commander.js](https://github.com/tj/commander.js/) and [commander.js-error](https://github.com/justinhelmer/commander.js-error) to create a command-line program that interfaces with the `GRM` [node interface](#node-interface) and exposes only the desired options:
 
-### grm.cli(command, description[, grmOpts])
+### grm.cli(command, description[, grmOptions])
 
 #### command
 
@@ -289,7 +289,7 @@ _{string}_ The `GRM` [sub command](#sub-commands) to run.
 
 _{string}_ The description of the interface, for generating the help documentation, i.e. `foo help [command]`
  
-#### grmOpts
+#### grmOptions
 
 _{object}_ An array of _{string}_ values representing which [options](#options) to expose. Should use the [short option format](#short-option-format), with the dash (`-`) omitted. By default, `o`, `q`, and `v` (for [--opts](#opts), [--quiet](#quiet), and [--verbose](#verbose)) are always exposed, so there is no need to supply them. 
  
