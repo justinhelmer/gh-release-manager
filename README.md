@@ -54,6 +54,12 @@ Additionally, each [option](#options) has a [short option format](#short-option-
 
 ### Using the CLI
 
+Display the contents of the manual:
+
+```bash
+$ grm help
+```
+
 Do it all in one go:
 
 ```bash
