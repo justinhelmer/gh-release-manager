@@ -2,6 +2,6 @@
 (function() {
   'use strict';
 
-  require('../lib/cliAdapter')('build', 'Build the markdown files to HTML using Jekyll.', ['q', 'v']);
+  require('../lib/cliAdapter')('build', 'Build the website files using Metalsmith.');
 })();
 
