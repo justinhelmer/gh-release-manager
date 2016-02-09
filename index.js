@@ -13,7 +13,8 @@
     jsdoc: require('./lib/actions/jsdoc'),
     lint: require('./lib/actions/lint'),
     release: require('./lib/actions/release'),
-    serve: require('./lib/actions/serve')
+    serve: require('./lib/actions/serve'),
+    test: require('./lib/actions/test')
   };
 
   /**

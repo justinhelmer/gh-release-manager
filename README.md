@@ -9,8 +9,8 @@ Download releases, generate documentation, build website, deploy, relax.
 The `GitHub Release Manager` automates the process of building a website and documenting `APIs` for any `GitHub` project. With a **single command**, you can:
 
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
-2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate output in the form of `markdown`.
-3. Run code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started).
+2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a custom [JSDoc template](http://usejsdoc.org/about-configuring-default-template.html).
+3. Run a code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started), as well as any custom defined `test` routine.
 4. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
 5. Deploy to [GitHub Pages](https://pages.github.com/). **_not yet implemented_**
 
@@ -219,9 +219,10 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub c
 
 1. [grm-download(1)](#grm-download1)
 2. [grm-jsdoc(1)](#grm-jsdoc1)
-3. [grm-lint(1)](#grm-lint1)
-4. [grm-build(1)](#grm-build1)
-5. [grm-deploy(1)](#grm-deploy1) **_not yet implemented_**
+3. [grm-test(1)](#grm-test1)
+4. [grm-lint(1)](#grm-lint1)
+5. [grm-build(1)](#grm-build1)
+6. [grm-deploy(1)](#grm-deploy1) **_not yet implemented_**
 
 #### grm-serve(1)
 
@@ -238,6 +239,20 @@ Uses [Gulp](http://gulpjs.com/) to launch a static server with [Browsersync](htt
 If only making changes to `.scss` files, the new styles will be injected automatically and the browser will not refresh. If making changes to `HTML` / `markdown` files, the browser will automatically refresh once the full [build](#grm-build1) of the website completes.
 
 - If `[port]` is not provided, the website will be served on port `3000`.
+
+#### grm-test(1)
+
+> Run a custom `test` routine using `npm test`, if it exists
+
+```bash
+$ grm test
+```
+
+**available [options](#common-options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
+
+Simply runs `npm test` with [run-script](https://docs.npmjs.com/cli/run-script). The one main difference is that `grm test` captures any errors that result from the `test` script not existing in `package.json`.
+
+Useful when run as a part of a larger pipeline, i.e. when running the [release](#grm-release1) command.
 
 ## Node interface
 
