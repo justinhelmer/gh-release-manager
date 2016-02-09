@@ -88,7 +88,7 @@ This will display the information about the command, including all of the availa
 $ grm build
 ```
 
-**available [options](#options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#options):** [_opts_](#opts), [_build_](#build), [_quiet_](#quiet), [_verbose_](#verbose)
 
 `GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `Gulp` pipeline for exceptional performance.
 
@@ -116,6 +116,8 @@ layout: page.html           # from source/layouts - defaults to page.html
 ```
 
 Finally, the `{{{content}}}` variable is made available to the `handlebars` templates, and contanins the [markdown](https://github.com/chjj/marked)-generated `HTML`.
+
+If there are additional `build` steps that need to happen outside of what `GRM` provides out-of-the-box, or any pre-conditions that need to be run before executing the build, use [options.build](#build).
 
 See the [lodocs](https://github.com/justinhelmer/lodocs) project for an example implementation of `gh-release-manager`.
 
@@ -319,6 +321,14 @@ _{string}_ The path to an optional [grm.opts](#grmopts) file. `CLI` args take pr
 
 **used by:** [all sub commands](#sub-commands)
 
+#### build
+
+_{string}_ The path to a module that runs custom `build` operations _before_ running the build operations included by `GRM`. The module should return `false` to prevent the remaining `build` operations from running, without throwing an error or stopping the pipeline.
+
+Alternatively, a [Bluebird](http://bluebirdjs.com/docs/api-reference.html) promise can be returned that also can be fulfilled with the boolean value `false` to prevent the remaining build operations from running.
+
+**used by:** [_build_](#grm-build1)
+
 #### docs
 
 _{string}_ The path to store the parsed `JSDoc` `markdown` files. If not set, files will be stored in the `docs` directory, relative to the _current working directory_.
@@ -382,7 +392,8 @@ If `opts` is not provided, `GRM` will look in the _current working directory_ fo
 The `grm.opts` file should be in the following format (example `grm.opts` file):
 
 ```
---docs _sass
+--build lib/build.js
+--docs source/docs
 --head docs-header.md
 --keep releases
 --lib lib/module.js
@@ -402,6 +413,7 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 | Long | Short |
 | --- | --- |
 | _--opts_ | **-o** |
+| _--build_ | **-b** |
 | _--docs_ | **-d** |
 | _--head_ | **-h** |
 | _--keep_ | **-k** |
