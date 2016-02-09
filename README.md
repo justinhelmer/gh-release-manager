@@ -44,13 +44,13 @@ There are **three** ways to interface with the `GitHub Release Manager`:
 2. Using the [node interface](#node-interface)
 3. Using the [CLI adapter](#cli-adapter)
 
-There is also a long list of [options](#options) that can be used to customize the behavior.
+There is also a long list of [options](#common-options) that can be used to customize the behavior.
 
 ## CLI
 
-The main command to interface with `GRM` corresponds with the name of the package (`gh-release-manager`). However, this package also uses [node-alias](https://github.com/justinhelmer/node-alias) to set up a _short_ command, `grm`.
+The package name (`gh-release-manager`) is also the command when using the `CLI`. However, `GRM` also uses [node-alias](https://github.com/justinhelmer/node-alias) to set up a _short_ command, `grm`.
 
-Additionally, each [option](#options) has a [short option format](#short-option-format) that is compatible with the `CLI`.
+Additionally, each [option](#common-options) has a [short option format](#short-option-format) that is compatible with the `CLI`.
 
 ### Using the CLI
 
@@ -70,7 +70,7 @@ Or, run one of the [sub commands](#sub-commands).
 
 ### Sub commands
 
-Although it is often most convenient to [do it all in one go](#usage), there may be a use case that involves running the steps individually (i.e. debugging, [serving](#grm-serve1), etc). For that reason, `GRM` is a collection of `Git` style sub commands. By default, if no `command` is specified, [grm-release(1)](#grm-release1) is run.
+Although it is often most convenient to [do it all in one go](#usage), there may be a use case that involves running the steps individually (i.e. debugging, [serving](#grm-serve1), etc). For that reason, `GRM` is a collection of sub commands (or just simply `"commands"`). By default, if no `[command]` is specified, [grm-release(1)](#grm-release1) is run.
 
 Every command has a `help` file. Simply run:
 
@@ -78,7 +78,7 @@ Every command has a `help` file. Simply run:
 $ grm help [command]
 ```
 
-This will display the information about the command, including all of the available [options](#options) for that command.
+This will display the information about the command, including all of the available [options](#common-options) for that command.
 
 #### grm-build(1)
 
@@ -88,7 +88,7 @@ This will display the information about the command, including all of the availa
 $ grm build
 ```
 
-**available [options](#options):** [_opts_](#opts), [_build_](#build), [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_build_](#build), [_quiet_](#quiet), [_verbose_](#verbose)
 
 `GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `Gulp` pipeline for exceptional performance.
 
@@ -139,7 +139,7 @@ $ grm deploy
 $ grm download
 ```
 
-**available [options](#options):** [_opts_](#opts), [_keep_](#keep), [_lib_](#lib), [_quiet_](#quiet), [_repo_](#repo), [_top_](#top), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_keep_](#keep), [_lib_](#lib), [_quiet_](#quiet), [_repo_](#repo), [_top_](#top), [_verbose_](#verbose)
 
 The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then the file located at [[lib]](#lib) (relative to the repo) is stored in [[keep]](#keep) (if provided).
 
@@ -156,7 +156,7 @@ The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then th
 $ grm jsdoc
 ```
 
-**available [options](#options):** [_opts_](#opts), [_docs_](#docs), [_head_](#head), [_keep_](#keep), [_quiet_](#quiet), [_repo_](#repo), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_docs_](#docs), [_head_](#head), [_keep_](#keep), [_quiet_](#quiet), [_repo_](#repo), [_verbose_](#verbose)
 
 The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://usejsdoc.org/) comment blocks. Then, the file located at [[head]](#head) is prepended to the generated file, with the `[release]` token being replaced by the release name. [[repo]](#repo) is used for `URL` replacement via [docdown](https://github.com/jdalton/docdown).
 
@@ -172,7 +172,7 @@ The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://us
 $ grm lint
 ```
 
-**available [options](#options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
 
 When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/) configuration file in the _current working directory_. It will accept any valid `ESLint` configuration file:
 
@@ -213,7 +213,7 @@ $ grm release
 $ grm # alias
 ```
 
-**[all options](#options) available**
+**[all options](#common-options) available**
 
 As mentioned earlier, `grm-release(1)` is the default command run when no [sub command](#sub-command) is specified. This will run all of the sub commands, with the exception of [grm-serve(1)](#grm-serve1) in the following order:
 
@@ -231,9 +231,9 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub c
 $ grm serve
 ```
 
-**available [options](#options):** [_opts_](#opts), [_port_](#port), [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_port_](#port), [_quiet_](#quiet), [_verbose_](#verbose)
 
-Uses `Gulp` to launch a static server with `Browserify`, and re-builds/re-loads when necessary by using `gulp.watch` to observe file changes.
+Uses [Gulp](http://gulpjs.com/) to launch a static server with [Browsersync](https://browsersync.io/), and re-builds/re-loads when necessary by using `gulp.watch` to observe file changes.
 
 If only making changes to `.scss` files, the new styles will be injected automatically and the browser will not refresh. If making changes to `HTML` / `markdown` files, the browser will automatically refresh once the full [build](#grm-build1) of the website completes.
 
@@ -241,7 +241,7 @@ If only making changes to `.scss` files, the new styles will be injected automat
 
 ## Node interface
 
-`GRM` also includes a `node` interface, which works the same way as the [CLI](#cli). All of the available [options](#options) are the same, and the interface can run any of the [sub commands](#sub-commands). For example:
+`GRM` also includes a `node` interface, which works the same way as the [CLI](#cli). All of the available [options](#common-options) are the same, and the interface can run any of the [sub commands](#sub-commands). For example:
 
 ```js
 const grm = require('gh-release-manager');
@@ -293,7 +293,7 @@ _{string}_ The description of the interface, for generating the help documentati
  
 #### grmOptions
 
-_{object}_ An array of _{string}_ values representing which [options](#options) to expose. Should use the [short option format](#short-option-format), with the dash (`-`) omitted. By default, `o`, `q`, and `v` (for [--opts](#opts), [--quiet](#quiet), and [--verbose](#verbose)) are always exposed, so there is no need to supply them. 
+_{object}_ An array of _{string}_ values representing which [options](#common-options) to expose. Should use the [short option format](#short-option-format), with the dash (`-`) omitted. By default, `o`, `q`, and `v` (for [--opts](#opts), [--quiet](#quiet), and [--verbose](#verbose)) are always exposed, so there is no need to supply them. 
  
 For example:
 
@@ -309,7 +309,7 @@ For example:
 })();
 ```
 
-When using the `CLI adapter`, `GRM` will always check for a [grm.opts](#grmopts) file. This way, a custom command-line program can specify project-level defaults for [options](#options), and expose _only_ the options that should be configurable by the program consumer.
+When using the `CLI adapter`, `GRM` will always check for a [grm.opts](#grmopts) file. This way, a custom command-line program can specify project-level defaults for [options](#common-options), and expose _only_ the options that should be configurable by the program consumer.
 
 ## Common options
 
@@ -327,7 +327,7 @@ _{string}_ The path to a module that runs custom `build` operations _before_ run
 
 Alternatively, a [Bluebird](http://bluebirdjs.com/docs/api-reference.html) promise can be returned that also can be fulfilled with the boolean value `false` to prevent the remaining build operations from running.
 
-**used by:** [_build_](#grm-build1)
+**used by:** [_build_](#grm-build1), [_release_](#grm-release1)
 
 #### docs
 
@@ -408,7 +408,7 @@ The `grm.opts` file should be in the following format (example `grm.opts` file):
 
 ### Short option format
 
-For less typing. Only works with the [CLI](#cli-interface) interface and for exposing [options](#options) using the [CLI adapter](#cli-adapter).
+For less typing. Only works with the [CLI](#cli-interface) interface and for exposing [options](#common-options) using the [CLI adapter](#cli-adapter).
 
 | Long | Short |
 | --- | --- |
