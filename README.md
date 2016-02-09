@@ -14,6 +14,8 @@ The `GitHub Release Manager` automates the process of building a website and doc
 4. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
 5. Deploy to [GitHub Pages](https://pages.github.com/). **_not yet implemented_**
 
+Additionally, `GRM` allows you to [serve](#grm-serve1) the website for debugging / development using [Browsersync](https://browsersync.io/).
+
 ## Installation
 
 `GitHub Release Manager` (`GRM`) can be installed _locally_ or _globally_, and includes both a [node interface](#node-interface) and a command-line interface ([CLI](#cli)). It also includes a [CLI adapter](#cli-adapter) to easily integrate the [node interface](#node-interface) into any existing `node`-based command-line program.
@@ -62,7 +64,7 @@ Or, run one of the [sub commands](#sub-commands).
 
 ### Sub commands
 
-Although it is often most convenient to [do it all in one go](#usage), there may be a use case that involves running the steps individually (i.e. debugging, dry runs, etc). For that reason, `GRM` is a collection of `Git` style sub commands. By default, if no `command` is specified, [grm-release(1)](#grm-release1) is run by default.
+Although it is often most convenient to [do it all in one go](#usage), there may be a use case that involves running the steps individually (i.e. debugging, [serving](#grm-serve1), etc). For that reason, `GRM` is a collection of `Git` style sub commands. By default, if no `command` is specified, [grm-release(1)](#grm-release1) is run.
 
 Every command has a `help` file. Simply run:
 
@@ -79,6 +81,8 @@ This will display the information about the command, including all of the availa
 ```bash
 $ grm build
 ```
+
+**available [options](#options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
 
 `GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `Gulp` pipeline for exceptional performance.
 
@@ -111,7 +115,7 @@ See the [lodocs](https://github.com/justinhelmer/lodocs) project for an example 
 
 #### grm-deploy(1)
 
-> Deploy a grm built project to gh-pages.
+> Deploy the build directory to `gh-pages`.
 
 ```bash
 $ grm deploy
@@ -121,18 +125,18 @@ $ grm deploy
 
 #### grm-download(1)
 
-> Download recent releases via the GitHub Tags API.
+> Download recent releases via the [GitHub Tags API](https://developer.github.com/v3/git/tags/).
 
 ```bash
 $ grm download
 ```
 
-**available [options](#options):** [_keep_](#keep), [_path_](#path), [_quiet_](#quiet), [_repo_](#repo), [_top_](#top), [_verbose_](#verbose)
+**available [options](#options):** [_opts_](#opts), [_keep_](#keep), [_lib_](#lib), [_quiet_](#quiet), [_repo_](#repo), [_top_](#top), [_verbose_](#verbose)
 
-The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then the file located at [[path]](#path) (relative to the repo) is stored in [[keep]](#keep) (if provided).
+The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then the file located at [[lib]](#lib) (relative to the repo) is stored in [[keep]](#keep) (if provided).
 
 - If `[keep]` is not provided, `GRM` will store the downloaded files in a temporary directory that is deleted after success or failure.
-- If `[path]` is not provided, `GRM` will assume the file to be stored is located at `[project root]/index.js`.
+- If `[lib]` is not provided, `GRM` will assume the file to be stored is located at `[project root]/index.js`.
 - If `[repo]` is not provided, `GRM` will prompt for input in the format `[org/repo]`.
 - If `[top]` is not provided, `GRM` will fetch the default number of releases (determined by the `GitHub API`).
 
@@ -144,7 +148,7 @@ The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then th
 $ grm jsdoc
 ```
 
-**available [options](#options):** [_docs_](#docs), [_head_](#head), [_keep_](#keep), [_quiet_](#quiet), [_repo_](#repo), [_verbose_](#verbose)
+**available [options](#options):** [_opts_](#opts), [_docs_](#docs), [_head_](#head), [_keep_](#keep), [_quiet_](#quiet), [_repo_](#repo), [_verbose_](#verbose)
 
 The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://usejsdoc.org/) comment blocks. Then, the file located at [[head]](#head) is prepended to the generated file, with the `[release]` token being replaced by the release name. [[repo]](#repo) is used for `URL` replacement via [docdown](https://github.com/jdalton/docdown).
 
@@ -160,7 +164,7 @@ The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://us
 $ grm lint
 ```
 
-**available [options](#options):** [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
 
 When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/) configuration file in the _current working directory_. It will accept any valid `ESLint` configuration file:
 
@@ -203,13 +207,29 @@ $ grm # alias
 
 **[all options](#options) available**
 
-As mentioned earlier, `grm-release(1)` is the default command run when no [sub command](#sub-command) is specified. This will run all of the sub commands in the following order:
+As mentioned earlier, `grm-release(1)` is the default command run when no [sub command](#sub-command) is specified. This will run all of the sub commands, with the exception of [grm-serve(1)](#grm-serve1) in the following order:
 
 1. [grm-download(1)](#grm-download1)
 2. [grm-jsdoc(1)](#grm-jsdoc1)
 3. [grm-lint(1)](#grm-lint1)
 4. [grm-build(1)](#grm-build1)
 5. [grm-deploy(1)](#grm-deploy1) **_not yet implemented_**
+
+#### grm-serve(1)
+
+> Serve the website for debugging / development using [Browsersync](https://browsersync.io/).
+
+```bash
+$ grm serve
+```
+
+**available [options](#options):** [_opts_](#opts), [_port_](#port), [_quiet_](#quiet), [_verbose_](#verbose)
+
+Uses `Gulp` to launch a static server with `Browserify`, and re-builds/re-loads when necessary by using `gulp.watch` to observe file changes.
+
+If only making changes to `.scss` files, the new styles will be injected automatically and the browser will not refresh. If making changes to `HTML` / `markdown` files, the browser will automatically refresh once the full [build](#grm-build1) of the website completes.
+
+- If `[port]` is not provided, the website will be served on port `3000`.
 
 ## Node interface
 
@@ -220,7 +240,7 @@ const grm = require('gh-release-manager');
 
 grm('download', {
   keep: 'releases',
-  path 'lib/module.js'
+  lib 'lib/module.js'
   repo: 'justinhelmer/gh-release-manager'
   top: 5,
   verbose 2
@@ -233,7 +253,7 @@ It returns a [Bluebird](http://bluebirdjs.com/docs/api-reference.html) promise, 
 const grm = require('gh-release-manager');
 const options = {
   keep: 'releases',
-  path 'lib/module.js'
+  lib 'lib/module.js'
   repo: 'justinhelmer/gh-release-manager'
   top: 5,
   verbose 2
@@ -265,7 +285,7 @@ _{string}_ The description of the interface, for generating the help documentati
  
 #### grmOpts
 
-_{object}_ An array of _{string}_ values representing which [options](#options) to expose. Should use the [short option format](#short-option-format), with the dash (`-`) omitted. By default, `o` (for [--opts](#opts)) is always exposed, so there is no need to supply it. 
+_{object}_ An array of _{string}_ values representing which [options](#options) to expose. Should use the [short option format](#short-option-format), with the dash (`-`) omitted. By default, `o`, `q`, and `v` (for [--opts](#opts), [--quiet](#quiet), and [--verbose](#verbose)) are always exposed, so there is no need to supply them. 
  
 For example:
 
@@ -283,45 +303,69 @@ For example:
 
 When using the `CLI adapter`, `GRM` will always check for a [grm.opts](#grmopts) file. This way, a custom command-line program can specify project-level defaults for [options](#options), and expose _only_ the options that should be configurable by the program consumer.
 
-## Options
+## Common options
 
-Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. Many of the options are common across the [sub commands](#sub-commands). For that reason, they are documented as an aggregate list:
+Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. Several of the options are `common` across the [sub commands](#sub-commands):
 
 #### opts
 
 _{string}_ The path to an optional [grm.opts](#grmopts) file. `CLI` args take precedence.
 
+**used by:** [all sub commands](#sub-commands)
+
 #### docs
 
 _{string}_ The path to store the parsed `JSDoc` `markdown` files. If not set, files will be stored in the `docs` directory, relative to the _current working directory_.
+
+**used by:** [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
  
 #### head
 
-_{string}_ The path to a header `markdown` file that will be prepended to every documentation file during `markdown` generation. If not set, the script will look in the _current working directory_ for a file called `docs-header.md`. The token `[release]` is replaced with the release name. 
+_{string}_ The path to a header `markdown` file that will be prepended to every documentation file during `markdown` generation. If not set, the script will look in the _current working directory_ for a file called `docs-header.md`. The token `[release]` is replaced with the release name.
+ 
+**used by:** [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
  
 #### keep
 
 _{string}_ The path to where releases should be stored. If this option is not set, downloaded files will be deleted when the process exits, whether it succeeds or fails.
 
-#### path
+**used by:** [_download_](#grm-download1), [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
 
-_{string}_ The relative path to the file to parse; assumes the same relative path for all releases. If not set, `[project root]/index.js` is assumed.
+#### lib
+
+_{string}_ The relative path to the file to parse for `JSDoc` headers; assumes the same relative path for all releases. If not set, `[project root]/index.js` is assumed.
+
+**used by:** [_download_](#grm-download1), [_release_](#grm-release1)
+
+#### port
+
+_{string}_ The port number to launch a development server using [Browsersync](https://browsersync.io/). If not set, `[project root]/index.js` is assumed.
+
+**used by:** [_serve_](#grm-serve1)
 
 #### quiet
 
 _{boolean}_ Suppress all output (`STDOUT` and `STDERR`). Defaults to `false`.
 
+**used by:** [all sub commands](#sub-commands)
+
 #### repo
 
 _{string}_ The repository to fetch releases for (in the format `org/repo`) via the [GitHub Tags API](https://developer.github.com/v3/git/tags/). If not set, will be prompted to enter it.
+
+**used by:** [_deploy_](#grm-deploy1), [_download_](#grm-download1), [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
  
 #### top
 
 _{number}_ The number of recent releases to fetch. Without specifying, will grab the default amount (determined by the `GitHub API`).
 
+**used by:** [_download_](#grm-download1), [_release_](#grm-release1)
+
 #### verbose
 
 _{mixed}_ Show more output. Can be `true`, `false`, or a number to specify the _verbosity level_. Defaults to `false`.
+
+**used by:** [all sub commands](#sub-commands)
 
 ### grm.opts
 
@@ -335,7 +379,8 @@ The `grm.opts` file should be in the following format (example `grm.opts` file):
 --docs _sass
 --head docs-header.md
 --keep releases
---path lib/module.js
+--lib lib/module.js
+--port 8000
 --quiet false
 --repo justinhelmer/gh-release-manager
 --top 5
@@ -354,7 +399,8 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 | _--docs_ | **-d** |
 | _--head_ | **-h** |
 | _--keep_ | **-k** |
-| _--path_ | **-p** |
+| _--lib_ | **-l** |
+| _--port_ | **-p** |
 | _--quiet_ | **-q** |
 | _--repo_ | **-r** |
 | _--top_ | **-t** |

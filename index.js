@@ -7,12 +7,13 @@
   var opts = require('./lib/opts');
 
   var actions = {
+    build: require('./lib/actions/build'),
+    deploy: require('./lib/actions/deploy'),
     download: require('./lib/actions/download'),
     jsdoc: require('./lib/actions/jsdoc'),
     lint: require('./lib/actions/lint'),
-    build: require('./lib/actions/build'),
-    deploy: require('./lib/actions/deploy'),
-    release: require('./lib/actions/release')
+    release: require('./lib/actions/release'),
+    serve: require('./lib/actions/serve')
   };
 
   /**
