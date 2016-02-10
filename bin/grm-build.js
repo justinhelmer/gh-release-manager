@@ -2,6 +2,6 @@
 (function() {
   'use strict';
 
-  require('../lib/cliAdapter')('build', 'Build the website files using Metalsmith.', ['b']);
+  require('../lib/cliAdapter')('build', 'Build the website files using Metalsmith.', ['b', 'u']);
 })();
 

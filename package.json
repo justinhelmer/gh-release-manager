@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.9.3",
+  "version": "0.10.0",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
@@ -59,6 +59,7 @@
     "mkdirp": "^0.5.1",
     "node-alias": "^1.0.4",
     "node-clean-exit": "^0.2.1",
+    "opn": "^4.0.0",
     "request": "^2.69.0",
     "spork": "^0.3.1",
     "tildify": "^1.1.2"

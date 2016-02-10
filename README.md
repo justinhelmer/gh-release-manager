@@ -6,13 +6,14 @@ Download releases, generate documentation, build website, deploy, relax.
 [![dependency status](https://david-dm.org/justinhelmer/gh-release-manager.svg)](https://github.com/justinhelmer/gh-release-manager)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/justinhelmer/gh-release-manager/issues)
 
-The `GitHub Release Manager` automates the process of building a website and documenting `APIs` for any `GitHub` project. With a **single command**, you can:
+The `GitHub Release Manager` automates the process of building a website and documenting `APIs` for any `GitHub` project. With a **_single command_**, you can run _any_ or _all_ of the following:
 
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
-2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a custom [JSDoc template](http://usejsdoc.org/about-configuring-default-template.html).
-3. Run a code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started), as well as any custom defined `test` routine.
-4. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
 5. Deploy to [GitHub Pages](https://pages.github.com/). **_not yet implemented_**
+2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a custom [JSDoc template](http://usejsdoc.org/about-configuring-default-template.html) for navigating any or all available releases.
+3. Run a code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started), by creating an `ESLint` configuration file.
+4. Run any custom defined `test` routine by running [npm test](https://docs.npmjs.com/cli/test).
+5. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more - all through a single [Gulp](http://gulpjs.com/) pipeline.
 
 Additionally, `GRM` allows you to [serve](#grm-serve1) the website for debugging / development using [Browsersync](https://browsersync.io/).
 
@@ -88,7 +89,7 @@ This will display the information about the command, including all of the availa
 $ grm build
 ```
 
-**available [options](#common-options):** [_opts_](#opts), [_build_](#build), [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_build_](#build), [_quiet_](#quiet), [_urlBase_](#urlbase), [_verbose_](#verbose)
 
 `GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `Gulp` pipeline for exceptional performance.
 
@@ -119,7 +120,11 @@ layout: page.html           # from source/layouts - defaults to page.html
 Finally, the following data is made available to all `Handlebars` templates:
 
 - `content` - Contains the [marked](https://github.com/chjj/marked)-generated `HTML`. Should use triple-brackets (i.e. `{{{content}}}`) to [escape HTML](http://handlebarsjs.com/#html-escaping).
-- `site` - An object of all global template [metadata](https://github.com/segmentio/metalsmith-metadata), read from the `grm.metadata.json` file in the _project root_. If the `grm.metadata.json` file does not exist, `site` will be `undefined`.
+- `site` - A merged object containing:
+    - All global template [metadata](https://github.com/segmentio/metalsmith-metadata) read from the `grm.metadata.json` file in the _project root_.
+    - `urlBase`, if set by [options.urlBase](#urlbase). Useful for generating url prefixes, i.e. `{{site.urlBase}}/images.png`
+    
+    > If the `grm.metadata.json` file does not exist, and [options.urlBase](#urlbase) is not set, `site` will be `undefined`.
 
 Example `grm.metadata.json`:
 
@@ -253,13 +258,14 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub c
 $ grm serve
 ```
 
-**available [options](#common-options):** [_opts_](#opts), [_port_](#port), [_quiet_](#quiet), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_port_](#port), [_quiet_](#quiet), [_urlBase_](#urlbase), [_verbose_](#verbose)
 
-Uses [Gulp](http://gulpjs.com/) to launch a static server with [Browsersync](https://browsersync.io/), and re-builds/re-loads when necessary by using `gulp.watch` to observe file changes.
+Uses [Gulp](http://gulpjs.com/) to launch a static server with [Browsersync](https://browsersync.io/), and re-builds/re-loads when necessary by using `gulp.watch` to observe file changes. Additionally uses [opn](https://github.com/sindresorhus/opn) to automatically launch a browser to the base url.
 
 If only making changes to `.scss` files, the new styles will be injected automatically and the browser will not refresh. If making changes to `HTML` / `markdown` files, the browser will automatically refresh once the full [build](#grm-build1) of the website completes.
 
 - If `[port]` is not provided, the website will be served on port `3000`.
+- If `[urlBase]` is set, the server will alias all requests by removing [urlBase](#urlbase) when doing a static file lookup. Also [opens](https://github.com/sindresorhus/opn) the browser to the base URL. 
 
 #### grm-test(1)
 
@@ -413,6 +419,12 @@ _{number}_ The number of recent releases to fetch. Without specifying, will grab
 
 **used by:** [_download_](#grm-download1), [_release_](#grm-release1)
 
+#### urlBase
+
+_{string}_ The base used to [serve](#grm-serve1) the website. Also passed as `metadata` to the `Handlebars` templates during [build](#grm-build1).
+
+**used by:** [_build_](#grm-build1), [_release_](#grm-release1), [_serve_](#grm-serve1)
+
 #### verbose
 
 _{mixed}_ Show more output. Can be `true`, `false`, or a number to specify the _verbosity level_. Defaults to `false`.
@@ -437,6 +449,7 @@ The `grm.opts` file should be in the following format (example `grm.opts` file):
 --quiet false
 --repo justinhelmer/gh-release-manager
 --top 5
+--url-base /gh-release-manager.github.io
 --verbose 2
 ```
 
@@ -458,6 +471,7 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 | _--quiet_ | **-q** |
 | _--repo_ | **-r** |
 | _--top_ | **-t** |
+| _--urlBase_ | **-u** |
 | _--verbose_ | **-v** |
 
 ## Contributing

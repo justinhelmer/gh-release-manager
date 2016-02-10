@@ -2,6 +2,6 @@
 (function() {
   'use strict';
 
-  require('../lib/cliAdapter')('serve', 'Serve the website locally.', ['p']);
+  require('../lib/cliAdapter')('serve', 'Serve the website locally.', ['p', 'u']);
 })();
 
