@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
@@ -40,9 +40,6 @@
     "commander.js-error": "^1.1.0",
     "docdown": "^0.4.1",
     "eslint": "^1.10.3",
-    "eslint-config-airbnb": "^5.0.0",
-    "eslint-config-google": "^0.3.0",
-    "eslint-config-react": "^1.1.1",
     "gulp": "^3.9.1",
     "gulp-eslint": "^1.1.1",
     "gulp-filter": "^3.0.1",
