@@ -2,6 +2,6 @@
 (function() {
   'use strict';
 
-  require('../lib/cliAdapter')('deploy', 'Deploy the build directory to gh-pages.', ['r']);
+  require('../lib/cliAdapter')('deploy', 'Deploy the build directory to gh-pages.', ['f']);
 })();
 

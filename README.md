@@ -9,11 +9,11 @@ Download releases, generate documentation, build website, deploy, relax.
 The `GitHub Release Manager` automates the process of building a website and documenting `APIs` for any `GitHub` project. With a **_single command_**, you can run _any_ or _all_ of the following:
 
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
-5. Deploy to [GitHub Pages](https://pages.github.com/). **_not yet implemented_**
 2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a custom [JSDoc template](http://usejsdoc.org/about-configuring-default-template.html) for navigating any or all available releases.
 3. Run a code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started), by creating an `ESLint` configuration file.
 4. Run any custom defined `test` routine by running [npm test](https://docs.npmjs.com/cli/test).
 5. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more - all through a single [Gulp](http://gulpjs.com/) pipeline.
+6. Deploy to [GitHub Pages](https://pages.github.com/) using [Gulp](http://gulpjs.com/).
 
 Additionally, `GRM` allows you to [serve](#grm-serve1) the website for debugging / development using [Browsersync](https://browsersync.io/).
 
@@ -155,7 +155,9 @@ See the [lodash.github.io](https://github.com/justinhelmer/lodash.github.io) pro
 $ grm deploy
 ```
 
-**Coming soon!**
+**available [options](#common-options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
+
+The final step of the [release](#grm-release1) routine. Uses [GitHub Pages](https://pages.github.com/) for deployment. Pushes the `build/` folder to `gh-pages` using [gulp-gh-pages](https://github.com/shinnn/gulp-gh-pages). Assumes the _current working directory_ is a `Git` repository, and uses its remote url.
 
 #### grm-download(1)
 
@@ -239,7 +241,7 @@ $ grm release
 $ grm # alias
 ```
 
-**[all options](#common-options) available**
+**[all common options](#common-options),** plus [_deploy_](#deploy).
 
 As mentioned earlier, `grm-release(1)` is the default command run when no [sub command](#sub-command) is specified. This will run all of the sub commands, with the exception of [grm-serve(1)](#grm-serve1) in the following order:
 
@@ -248,7 +250,7 @@ As mentioned earlier, `grm-release(1)` is the default command run when no [sub c
 3. [grm-test(1)](#grm-test1)
 4. [grm-lint(1)](#grm-lint1)
 5. [grm-build(1)](#grm-build1)
-6. [grm-deploy(1)](#grm-deploy1) **_not yet implemented_**
+6. [grm-deploy(1)](#grm-deploy1) _can be skipped using the [deploy](#deploy) option_
 
 #### grm-serve(1)
 
@@ -378,7 +380,23 @@ Alternatively, a [Bluebird](http://bluebirdjs.com/docs/api-reference.html) promi
 _{string}_ The path to store the parsed `JSDoc` `markdown` files. If not set, files will be stored in the `docs` directory, relative to the _current working directory_.
 
 **used by:** [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
+
+#### deploy
+
+_{boolean}_ Skip the [deploy](#grm-deploy1) step during [release](#grm-release1) (i.e. perform a _"dry run"_) by setting this to `false`. Defaults to `true`.
+
+**used by:** [_release_](#grm-release1)
+
+> Since the default behavior of [release](#grm-release1) is to [deploy](#grm-deploy1), the `CLI` accepts a `--no-deploy` flag instead of using `--deploy false`.
  
+#### force
+
+_{boolean}_ Force push to `gh-pages` during deployment.
+ 
+**used by:** [_deploy_](#grm-deploy1), [_release_](#grm-release1)
+ 
+By default, the `deploy` command will _not_ **force push** to [GitHub Pages](https://pages.github.com/). Set this option to `true` to reverse that behavior.
+
 #### head
 
 _{string}_ The path to a header `markdown` file that will be prepended to every documentation file during `markdown` generation. If not set, the script will look in the _current working directory_ for a file called `docs-header.md`. The token `[release]` is replaced with the release name.
@@ -444,6 +462,7 @@ The `grm.opts` file should be in the following format (example `grm.opts` file):
 ```
 --build lib/build.js
 --docs source/docs
+--force true
 --head docs-header.md
 --keep releases
 --lib lib/module.js
@@ -465,7 +484,9 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 | --- | --- |
 | _--opts_ | **-o** |
 | _--build_ | **-b** |
+| _--no-deploy_ | **-n** |
 | _--docs_ | **-d** |
+| _--force_ | **-f** |
 | _--head_ | **-h** |
 | _--keep_ | **-k** |
 | _--lib_ | **-l** |
