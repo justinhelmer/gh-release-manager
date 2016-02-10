@@ -214,24 +214,6 @@ If the file does not exist, a warning will be displayed, but the task will not e
 
 It then uses [Gulp](http://gulpjs.com/) to run `ESLint` with the supplied configuration against **all** `JavaScript` files with the exception of the `node_modules/` folder. `Gulp` and `ESLint` are both used programmatically, and thus **do not** need to be globally installed.
 
-Note that because `ESLint` is installed as a dependency of `GRM`, the [extends](http://eslint.org/docs/user-guide/configuring#extending-configuration-files) features of `ESLint` will only work for configuration packages that have been added to _this_ project, or the `ESLint`-recommended config.
-
-Currently, the list of supported pre-build configs includes:
-
-1. [eslint-config-google](https://www.npmjs.com/package/eslint-config-google)
-2. [eslint-config-airbnb](https://www.npmjs.com/package/eslint-config-airbnb)
-3. [eslint-config-react](https://www.npmjs.com/package/eslint-config-react)
-
-i.e.:
-
-```js
-module.exports = {
-  extends: 'google'
-};
-```
-
-Attempting to use other pre-built configs will result in an error, even if included in your projec'ts `package.json`. If there is a pre-built config that you would like included with `GRM`, just let me know or submit a `pull request`.
-
 #### grm-release(1)
 
 > Do it all in one go.
