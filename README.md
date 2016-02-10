@@ -355,7 +355,9 @@ When using the `CLI adapter`, `GRM` will always check for a [grm.opts](#grmopts)
 
 ## Common options
 
-Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. Several of the options are `common` across the [sub commands](#sub-commands):
+Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. The only exception is that `CLI` args (as well as [grm.opts](#grmopts)) use `kebab-case` while the `node` interface expects args to be in `camelCase` (i.e. `url-base` for the `CLI` vs. `urlBase` for the `node` interface). This is to match the conventions of the respective constructs.
+
+Several of the options are `common` across the [sub commands](#sub-commands).
 
 #### opts
 
