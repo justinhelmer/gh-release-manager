@@ -105,6 +105,7 @@ Then, all you need to do is to start creating files according to the expected di
     - partials              # all handlebars partials go here
 - .eslintrc.js              # see grm-lint(1)
 - grm.opts                  # see grm.opts()
+- grm.metadata.json         # global template metadata (see below)
 ```
 
 The `markdown` files will also be parsed for [YAML Front Matter](https://github.com/dworthen/js-yaml-front-matter), and the data is passed to the template and made available to `handlebars`. Additionally, the following `Front Matter` attribute(s) have special meaning:
@@ -115,11 +116,31 @@ layout: page.html           # from source/layouts - defaults to page.html
 ---
 ```
 
-Finally, the `{{{content}}}` variable is made available to the `handlebars` templates, and contanins the [markdown](https://github.com/chjj/marked)-generated `HTML`.
+Finally, the following data is made available to all `Handlebars` templates:
+
+- `content` - Contains the [marked](https://github.com/chjj/marked)-generated `HTML`. Should use triple-brackets (i.e. `{{{content}}}`) to [escape HTML](http://handlebarsjs.com/#html-escaping).
+- `site` - An object of all global template [metadata](https://github.com/segmentio/metalsmith-metadata), read from the `grm.metadata.json` file in the _project root_. If the `grm.metadata.json` file does not exist, `site` will be `undefined`.
+
+Example `grm.metadata.json`:
+
+```js
+{
+  "title": "Lodash.com"
+}
+```
+
+...and an example usage, in a custom `head.html`:
+
+```html
+<!-- If 'title' is set in the 'Front Matter' for the page,
+    use it and the global 'site.title' from 'grm.metadata.json' -->
+
+<title>{{#if title}}{{title}} | {{site.title}}{{else}}{{site.title}}{{/if}}</title>
+```
 
 If there are additional `build` steps that need to happen outside of what `GRM` provides out-of-the-box, or any pre-conditions that need to be run before executing the build, use [options.build](#build).
 
-See the [lodocs](https://github.com/justinhelmer/lodocs) project for an example implementation of `gh-release-manager`.
+See the [lodash.github.io](https://github.com/justinhelmer/lodash.github.io) project for an example implementation of `gh-release-manager`.
 
 #### grm-deploy(1)
 
