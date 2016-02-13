@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.11.6",
+  "version": "0.12.0",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
@@ -46,9 +46,11 @@
     "gulp-gh-pages": "^0.5.4",
     "gulp-metalsmith": "0.0.3",
     "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.2.0",
     "handlebars": "^4.0.5",
     "inquirer": "^0.12.0",
+    "lazypipe": "^1.0.1",
     "lodash": "^4.3.0",
     "metalsmith": "^2.1.0",
     "metalsmith-layouts": "^1.4.4",
@@ -60,7 +62,8 @@
     "opn": "^4.0.0",
     "request": "^2.69.0",
     "spork": "^0.3.1",
-    "tildify": "^1.1.2"
+    "tildify": "^1.1.2",
+    "wait-stream": "^1.1.0"
   },
   "engines": {
     "node": ">=0.12"
