@@ -2,9 +2,11 @@
   'use strict';
 
   var _ = require('lodash');
+  var chalk = require('chalk');
   var Promise = require('bluebird');
   var cleanup = require('./lib/cleanup');
   var opts = require('./lib/opts');
+  var timer = new Timer();
 
   var actions = {
     build: require('./lib/actions/build'),
@@ -38,9 +40,17 @@
         prepareOptions = opts;
       }
 
+      timer.start();
+
       return prepareOptions(options)
           .then(actions[op])
-          .then(_.partial(cleanup, options));
+          .then(_.partial(cleanup, options))
+          .then(function() {
+            if (!options.quiet) {
+              var time = timer.stop();
+              console.log('\n' + chalk.green('Done with everything') + '; finished in', chalk.cyan(timer.stop().toFixed(3)), 'seconds');
+            }
+          });
     }
 
     return Promise.reject(new Error('unknown op: \'' + op + '\''));
@@ -49,6 +59,29 @@
   grm.cli = function() {
     require('./lib/cliAdapter').apply(null, arguments);
   };
+
+  function Timer() {
+    var timer = this;
+
+    timer.getTime = getTime;
+    timer.start = start;
+    timer.stop = stop;
+    timer.startTime = 0;
+    timer.stopTime = 0;
+
+    function start() {
+      timer.startTime = new Date().getTime();
+    }
+
+    function stop() {
+      timer.stopTime = new Date().getTime();
+      return getTime();
+    }
+
+    function getTime() {
+      return (timer.stopTime - timer.startTime) / 1000;
+    }
+  }
 
   module.exports = grm;
 })();
