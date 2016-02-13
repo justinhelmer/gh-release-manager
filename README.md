@@ -5,6 +5,7 @@ Download releases, generate documentation, build website, deploy, relax.
 [![node version](https://img.shields.io/node/v/gh-release-manager.svg?style=flat)](http://nodejs.org/download/)
 [![dependency status](https://david-dm.org/justinhelmer/gh-release-manager.svg)](https://github.com/justinhelmer/gh-release-manager)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/justinhelmer/gh-release-manager/issues)
+[![devDependency status](https://david-dm.org/justinhelmer/gh-release-manager/dev-status.svg)](https://github.com/justinhelmer/gh-release-manager)
 
 The `GitHub Release Manager` automates the process of building a website and documenting `APIs` for any `GitHub` project. With a **_single command_**, you can run _any_ or _all_ of the following:
 
@@ -482,6 +483,7 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 ## Contributing
 
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/justinhelmer/gh-release-manager/issues)
+[![devDependency status](https://david-dm.org/justinhelmer/gh-release-manager/dev-status.svg)](https://github.com/justinhelmer/gh-release-manager)
 
 ## License
 
