@@ -11,10 +11,14 @@ The `GitHub Release Manager` automates the process of building a website and doc
 
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
 2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a custom [JSDoc template](http://usejsdoc.org/about-configuring-default-template.html) for navigating any or all available releases.
-3. Run a code quality check using [Gulp](http://gulpjs.com/) and [ESLint](http://eslint.org/docs/user-guide/getting-started), by creating an `ESLint` configuration file.
+3. Run a code quality check using [ESLint](http://eslint.org/docs/user-guide/getting-started), by simply creating an `ESLint` configuration file.
 4. Run any custom defined `test` routine by running [npm test](https://docs.npmjs.com/cli/test).
-5. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more - all through a single [Gulp](http://gulpjs.com/) pipeline.
-6. Deploy to [GitHub Pages](https://pages.github.com/) using [Gulp](http://gulpjs.com/).
+5. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
+6. Deploy to [GitHub Pages](https://pages.github.com/).
+
+Much of this is done through a single [vinyl](https://github.com/gulpjs/vinyl-fs) file stream, for maximum peformance. It also provides an interface for running [custom build operations](#custom-build-tasks) and/or validating/preventing the build.
+
+![gh-release-manager](https://raw.githubusercontent.com/justinhelmer/gh-release-manager/master/grm.jpg)
 
 Additionally, `GRM` allows you to [serve](#grm-serve1) the website for debugging / development using [Browsersync](https://browsersync.io/).
 
@@ -92,7 +96,7 @@ $ grm build
 
 **available [options](#common-options):** [_opts_](#opts), [_build_](#build), [_quiet_](#quiet), [_urlBase_](#urlbase), [_verbose_](#verbose)
 
-`GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `Gulp` pipeline for exceptional performance.
+`GRM` includes a bundle of tools for dynamically building a website; similar to popular tools like [Jekyll](https://jekyllrb.com/). However, the toolset provided in `GRM` is much more powerful, as it is built on top of [Metalsmith](http://www.metalsmith.io/). It runs purely in `node`, so there is no extra `Ruby` dependency. It also integrates seamlessly with the `vinyl` pipeline for exceptional performance.
 
 To take advantage of this toolset, get familiar with [Handlebars](http://handlebarsjs.com/) which is used as the templating engine, and [Sass](http://sass-lang.com/) which is the included `CSS` preprocessor.
 
@@ -144,7 +148,7 @@ Example `grm.metadata.json`:
 <title>{{#if title}}{{title}} | {{site.title}}{{else}}{{site.title}}{{/if}}</title>
 ```
 
-If there are additional `build` steps that need to happen outside of what `GRM` provides out-of-the-box, or any pre-conditions that need to be run before executing the build, use [options.build](#build).
+Also, [custom build](#custom-build-tasks) tasks can be automated and included in the pipeline when `build` is run.
 
 See the [lodash.github.io](https://github.com/justinhelmer/lodash.github.io) project for an example implementation of `gh-release-manager`.
 
@@ -158,7 +162,7 @@ $ grm deploy
 
 **available [options](#common-options):** [_opts_](#opts), [_quiet_](#quiet), [_verbose_](#verbose)
 
-The final step of the [release](#grm-release1) routine. Uses [GitHub Pages](https://pages.github.com/) for deployment. Pushes the `build/` folder to `gh-pages` using [gulp-gh-pages](https://github.com/shinnn/gulp-gh-pages). Assumes the _current working directory_ is a `Git` repository, and uses its remote url.
+The final step of the [release](#grm-release1) routine. Uses [GitHub Pages](https://pages.github.com/) for deployment. Pushes the `build/` folder to `gh-pages`. Assumes the _current working directory_ is a `Git` repository, and uses its remote url.
 
 #### grm-download(1)
 
@@ -213,7 +217,7 @@ When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/
 
 If the file does not exist, a warning will be displayed, but the task will not exit with an error.
 
-It then uses [Gulp](http://gulpjs.com/) to run `ESLint` with the supplied configuration against **all** `JavaScript` files with the exception of the `node_modules/` folder. `Gulp` and `ESLint` are both used programmatically, and thus **do not** need to be globally installed.
+It then runs `ESLint` with the supplied configuration against **all** `JavaScript` files with the exception of the `node_modules/` folder.
 
 #### grm-release(1)
 
@@ -245,9 +249,9 @@ $ grm serve
 
 **available [options](#common-options):** [_opts_](#opts), [_port_](#port), [_quiet_](#quiet), [_urlBase_](#urlbase), [_verbose_](#verbose)
 
-Uses [Gulp](http://gulpjs.com/) to launch a static server with [Browsersync](https://browsersync.io/), and re-builds/re-loads when necessary by using `gulp.watch` to observe file changes. Additionally uses [opn](https://github.com/sindresorhus/opn) to automatically launch a browser to the base url.
+Launchs a static server with [Browsersync](https://browsersync.io/), and re-builds/re-loads when necessary by using [gaze](https://github.com/shama/gaze) to observe file changes. Additionally uses [opn](https://github.com/sindresorhus/opn) to automatically launch a browser to the base url.
 
-If only making changes to `.scss` files, the new styles will be injected automatically and the browser will not refresh. If making changes to `HTML` / `markdown` files, the browser will automatically refresh once the full [build](#grm-build1) of the website completes.
+If only making changes to `.scss` files, the new styles will be injected automatically and the browser will not refresh; the changes will be seen immediately. If making changes to `HTML` / `markdown` files, the browser will automatically refresh once the full [build](#grm-build1) of the website completes.
 
 - If `[port]` is not provided, the website will be served on port `3000`.
 - If `[urlBase]` is set, the server will alias all requests by removing [urlBase](#urlbase) when doing a static file lookup. Also [opens](https://github.com/sindresorhus/opn) the browser to the base URL. 
@@ -354,7 +358,9 @@ _{string}_ The path to an optional [grm.opts](#grmopts) file. `CLI` args take pr
 
 _{string}_ The path to a module that runs custom `build` operations _before_ running the build operations included by `GRM`. The module should return `false` to prevent the remaining `build` operations from running, without throwing an error or stopping the pipeline.
 
-Alternatively, a [Bluebird](http://bluebirdjs.com/docs/api-reference.html) promise can be returned that also can be fulfilled with the boolean value `false` to prevent the remaining build operations from running.
+Alternatively, a promise can be returned that when fulfilled with the boolean value `false` will prevent the remaining build operations from running.
+
+> Can use [vinyl-tasks](https://github.com/justinhelmer/vinyl-tasks) for running streaming (i.e. `Gulp`) operations easily.
 
 **used by:** [_build_](#grm-build1), [_release_](#grm-release1)
 
@@ -479,6 +485,12 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 | _--top_ | **-t** |
 | _--urlBase_ | **-u** |
 | _--verbose_ | **-v** |
+
+## Custom build tasks
+
+If there are additional `build` steps that need to happen outside of what `GRM` provides out-of-the-box, or any pre-conditions that need to be run before executing the build, use [options.build](#build).
+
+This will allow the execution of any arbitrary functionality, such as running additional operations using [vinyl-tasks](https://github.com/justinhelmer/vinyl-tasks). It also provides the ability to stop the build from running. 
 
 ## Contributing
 
