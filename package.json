@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
@@ -52,6 +52,7 @@
     "inquirer": "^0.12.0",
     "lazypipe": "^1.0.1",
     "lodash": "^4.3.0",
+    "map-stream": "0.0.6",
     "metalsmith": "^2.1.0",
     "metalsmith-layouts": "^1.4.4",
     "metalsmith-markdown": "^0.2.1",
