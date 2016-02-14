@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
