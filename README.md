@@ -18,7 +18,9 @@ The `GitHub Release Manager` automates the process of building a website and doc
 
 Much of this is done through a single [vinyl](https://github.com/gulpjs/vinyl-fs) file stream, for maximum peformance. It also provides an interface for running [custom build operations](#custom-build-tasks) and/or validating/preventing the build.
 
-![gh-release-manager](https://raw.githubusercontent.com/justinhelmer/gh-release-manager/master/grm.jpg)
+<p align="center">
+  <img alt="console output" src="https://raw.githubusercontent.com/justinhelmer/gh-release-manager/master/grm.jpg" />
+</p>
 
 Additionally, `GRM` allows you to [serve](#grm-serve1) the website for debugging / development using [Browsersync](https://browsersync.io/).
 
