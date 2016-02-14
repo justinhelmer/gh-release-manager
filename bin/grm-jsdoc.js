@@ -2,6 +2,6 @@
 (function() {
   'use strict';
 
-  require('../lib/cliAdapter')('jsdoc', 'Parse JSDoc headers for locally-downloaded releases.', ['d', 'h', 'k', 'r']);
+  require('../lib/cliAdapter')('jsdoc', 'Parse JSDoc headers for locally-downloaded releases.', ['k']);
 })();
 

@@ -16,7 +16,7 @@ The `GitHub Release Manager` automates the process of building a website and doc
 5. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
 6. Deploy to [GitHub Pages](https://pages.github.com/).
 
-Much of this is done through a single [vinyl](https://github.com/gulpjs/vinyl-fs) file stream, for maximum peformance. It also provides an interface for running [custom build operations](#custom-build-tasks) and/or validating/preventing the build.
+Much of this is done through a single [vinyl](https://github.com/gulpjs/vinyl-fs) file stream (built on top of [Gulp](http://gulpjs.com/), for maximum peformance. It also provides an interface for running [custom build operations](#custom-build-tasks) and/or validating/preventing the build.
 
 <p align="center">
   <img alt="console output" src="https://raw.githubusercontent.com/justinhelmer/gh-release-manager/master/grm.jpg" />
@@ -191,13 +191,18 @@ The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then th
 $ grm jsdoc
 ```
 
-**available [options](#common-options):** [_opts_](#opts), [_docs_](#docs), [_head_](#head), [_keep_](#keep), [_quiet_](#quiet), [_repo_](#repo), [_verbose_](#verbose)
+**available [options](#common-options):** [_opts_](#opts), [_keep_](#keep), [_quiet_](#quiet), [_verbose_](#verbose)
 
-The `markdown` files located at [[keep]](#keep) are parsed for [JSDoc](http://usejsdoc.org/) comment blocks. Then, the file located at [[head]](#head) is prepended to the generated file, with the `[release]` token being replaced by the release name. [[repo]](#repo) is used for `URL` replacement via [docdown](https://github.com/jdalton/docdown).
+The `JavaScript` files located at [[keep]](#keep) are parsed for [JSDoc](http://usejsdoc.org/) comment blocks.
 
-- If `[docs]` is not provided, `GRM` will store the `JSDoc` parsed `markdown` in the `docs` folder within the _current working directory_.
-- If `[head]` is not provided, `GRM` will look in the _current working directory_ for a file called `docs-header.md`.
-- If `[repo]` is not provided, `GRM` will prompt for input in the format `[org/repo]`.
+> When running [release](#grm-release1), if `[keep]` is not set, files are stored in a `tmp` directory and parsed from there.
+
+Supports all `JSDoc` [JSON configuration](http://usejsdoc.org/about-configuring-jsdoc.html). `GRM` will look in the _current working directory_ for a file called `jsdoc.conf.json` and inherit the provided configuration. By default, the following options are set:
+
+- `configure` - Points to the project root as the location of [jsdoc.conf.json](http://usejsdoc.org/about-configuring-jsdoc.html).
+- `destination` - Points to `build/docs/[release]`.
+- `encoding` - UTF8.
+- `recurse` - Generates documentation recursively through the releases (`[keep]`) directory.
 
 #### grm-lint(1)
 
@@ -217,7 +222,7 @@ When this command is run, the `GRM` will look for an [ESLint](http://eslint.org/
 - .eslintrc.json
 - .eslintrc
 
-If the file does not exist, a warning will be displayed, but the task will not exit with an error.
+If the file does not exist, a warning will be displayed (if [verbosity](#verbose) is high enough), but the task will not exit with an error.
 
 It then runs `ESLint` with the supplied configuration against **all** `JavaScript` files with the exception of the `node_modules/` folder.
 
@@ -274,7 +279,7 @@ Useful when run as a part of a larger pipeline, i.e. when running the [release](
 
 ## Node interface
 
-`GRM` also includes a `node` interface, which works the same way as the [CLI](#cli). All of the available [options](#common-options) are the same, and the interface can run any of the [sub commands](#sub-commands). For example:
+`GRM` also includes a `node` interface, which works the same way as the [CLI](#cli). All of the available [options](#common-options) are the same, and the interface can run any of the [commands](#sub-commands). For example:
 
 ```js
 const grm = require('gh-release-manager');
@@ -292,6 +297,7 @@ It returns a [Bluebird](http://bluebirdjs.com/docs/api-reference.html) promise, 
 
 ```js
 const grm = require('gh-release-manager');
+
 const options = {
   keep: 'releases',
   lib 'lib/module.js'
@@ -312,17 +318,17 @@ grm('download', options)
 
 ## CLI adapter
 
-`GRM` also includes a [CLI adapter](#cli-adapter) to easily integrate the [node interface](#node-interface) into any exiting `node`-based command-line program. It uses [commander.js](https://github.com/tj/commander.js/) and [commander.js-error](https://github.com/justinhelmer/commander.js-error) to create a command-line program that interfaces with the `GRM` [node interface](#node-interface) and exposes only the desired options:
+`GRM` also includes a [CLI adapter](#cli-adapter) to easily integrate the [node interface](#node-interface) into any exiting `node`-based command-line program. It uses [commander.js](https://github.com/tj/commander.js/) to create a command-line program that integrates with the `GRM` [node interface](#node-interface) and exposes only the desired options.
 
 ### grm.cli(command, description[, grmOptions])
 
 #### command
 
-_{string}_ The `GRM` [sub command](#sub-commands) to run.
+_{string}_ The `GRM` [command](#sub-commands) to run.
 
 #### description
 
-_{string}_ The description of the interface, for generating the help documentation, i.e. `foo help [command]`
+_{string}_ The description of the interface, which is displayed with the help documentation, i.e. `foo help [command]`.
  
 #### grmOptions
 
@@ -346,7 +352,9 @@ When using the `CLI adapter`, `GRM` will always check for a [grm.opts](#grmopts)
 
 ## Common options
 
-Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same. The only exception is that `CLI` args (as well as [grm.opts](#grmopts)) use `kebab-case` while the `node` interface expects args to be in `camelCase` (i.e. `url-base` for the `CLI` vs. `urlBase` for the `node` interface). This is to match the conventions of the respective constructs.
+Options can be specified via the `CLI` or through the `node` interface. In either case, the options are the same.
+
+The only exception is that `CLI` args (as well as [grm.opts](#grmopts)) use `kebab-case` while the `node` interface accepts args in `camelCase` format (i.e. `url-base` for the `CLI` vs. `urlBase` for the `node` interface). This is to match the conventions of the respective constructs.
 
 Several of the options are `common` across the [sub commands](#sub-commands).
 
@@ -360,17 +368,11 @@ _{string}_ The path to an optional [grm.opts](#grmopts) file. `CLI` args take pr
 
 _{string}_ The path to a module that runs custom `build` operations _before_ running the build operations included by `GRM`. The module should return `false` to prevent the remaining `build` operations from running, without throwing an error or stopping the pipeline.
 
-Alternatively, a promise can be returned that when fulfilled with the boolean value `false` will prevent the remaining build operations from running.
-
-> Can use [vinyl-tasks](https://github.com/justinhelmer/vinyl-tasks) for running streaming (i.e. `Gulp`) operations easily.
+Alternatively, a promise can be returned that if fulfilled with the boolean value `false` will prevent the remaining build operations from running.
 
 **used by:** [_build_](#grm-build1), [_release_](#grm-release1)
 
-#### docs
-
-_{string}_ The path to store the parsed `JSDoc` `markdown` files. If not set, files will be stored in the `docs` directory, relative to the _current working directory_.
-
-**used by:** [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
+> Can use [vinyl-tasks](https://github.com/justinhelmer/vinyl-tasks) for running streaming operations easily.
 
 #### deploy
 
@@ -387,12 +389,6 @@ _{boolean}_ Force push to `gh-pages` during deployment.
 **used by:** [_deploy_](#grm-deploy1), [_release_](#grm-release1)
  
 By default, the `deploy` command will _not_ **force push** to [GitHub Pages](https://pages.github.com/). Set this option to `true` to reverse that behavior.
-
-#### head
-
-_{string}_ The path to a header `markdown` file that will be prepended to every documentation file during `markdown` generation. If not set, the script will look in the _current working directory_ for a file called `docs-header.md`. The token `[release]` is replaced with the release name.
- 
-**used by:** [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
  
 #### keep
 
@@ -404,7 +400,7 @@ _{string}_ The path to where releases should be stored. If this option is not se
 
 _{string}_ The relative path to the file to parse for `JSDoc` headers; assumes the same relative path for all releases. If not set, `[project root]/index.js` is assumed.
 
-**used by:** [_download_](#grm-download1), [_release_](#grm-release1)
+**used by:** [_download_](#grm-download1), [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
 
 #### port
 
@@ -422,7 +418,7 @@ _{boolean}_ Suppress all output (`STDOUT` and `STDERR`). Defaults to `false`.
 
 _{string}_ The repository to fetch releases for (in the format `org/repo`) via the [GitHub Tags API](https://developer.github.com/v3/git/tags/). If not set, will be prompted to enter it.
 
-**used by:** [_deploy_](#grm-deploy1), [_download_](#grm-download1), [_jsdoc_](#grm-jsdoc1), [_release_](#grm-release1)
+**used by:** [_deploy_](#grm-deploy1), [_download_](#grm-download1), [_release_](#grm-release1)
  
 #### top
 
@@ -452,9 +448,7 @@ The `grm.opts` file should be in the following format (example `grm.opts` file):
 
 ```
 --build lib/build.js
---docs source/docs
 --force true
---head docs-header.md
 --keep releases
 --lib lib/module.js
 --port 8000
@@ -476,9 +470,7 @@ For less typing. Only works with the [CLI](#cli-interface) interface and for exp
 | _--opts_ | **-o** |
 | _--build_ | **-b** |
 | _--no-deploy_ | **-n** |
-| _--docs_ | **-d** |
 | _--force_ | **-f** |
-| _--head_ | **-h** |
 | _--keep_ | **-k** |
 | _--lib_ | **-l** |
 | _--port_ | **-p** |

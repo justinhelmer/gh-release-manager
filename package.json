@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.12.9",
+  "version": "0.13.0",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
@@ -35,7 +35,6 @@
     "chalk": "^1.1.1",
     "commander": "^2.9.0",
     "commander.js-error": "^1.1.0",
-    "docdown": "^0.4.1",
     "eslint": "^1.10.3",
     "gaze": "^0.5.2",
     "gulp-eslint": "^1.1.1",
@@ -47,6 +46,7 @@
     "gulp-sass": "^2.2.0",
     "handlebars": "^4.0.5",
     "inquirer": "^0.12.0",
+    "jsdoc": "^3.4.0",
     "lazypipe": "^1.0.1",
     "lodash": "^4.3.0",
     "metalsmith": "^2.1.0",
