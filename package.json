@@ -1,6 +1,6 @@
 {
   "name": "gh-release-manager",
-  "version": "0.13.12",
+  "version": "0.14.0",
   "description": "Download releases, generate documentation, build website, deploy, relax",
   "keywords": [
     "github",
@@ -61,7 +61,7 @@
     "through2": "^2.0.1",
     "tildify": "^1.1.2",
     "vinyl-fs": "^2.3.1",
-    "vinyl-tasks": "0.1.6",
+    "vinyl-tasks": "1.0.0",
     "wait-stream": "^1.1.0"
   },
   "engines": {
