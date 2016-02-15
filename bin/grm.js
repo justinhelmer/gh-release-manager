@@ -3,7 +3,7 @@
   'use strict';
 
   require('commander')
-      .version('0.13.11')
+      .version('0.13.12')
       .description('Description:\n\n    Download releases, generate documentation, build website, deploy, relax.\n    ' +
           'Type \'help [cmd]\' to see the options for a particlar [command].')
       .command('download', 'download recent releases via the GitHub Tags API')
