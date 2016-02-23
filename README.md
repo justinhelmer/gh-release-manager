@@ -208,8 +208,8 @@ Supports all `JSDoc` [JSON configuration](http://usejsdoc.org/about-configuring-
 - `configure` - Points to the project root as the location of [jsdoc.conf.json](http://usejsdoc.org/about-configuring-jsdoc.html).
 - `destination` - Points to `build/docs/[release]`.
 - `encoding` - UTF8.
-- `template` - [Jaguar](https://github.com/davidshimjs/jaguarjs-jsdoc).
 - `recurse` - Generates documentation recursively through the releases (`[keep]`) directory.
+- `template` - [DocStrap](https://github.com/docstrap/docstrap) (highly customizable).
 
 > Any of the default options can be overridden using [config.opts](http://usejsdoc.org/about-configuring-jsdoc.html#incorporating-command-line-options-into-the-configuration-file).
 
