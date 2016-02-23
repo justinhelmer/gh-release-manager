@@ -152,6 +152,12 @@ Example `grm.metadata.json`:
 
 Also, [custom build](#custom-build-tasks) tasks can be automated and included in the pipeline when `build` is run.
 
+Additionally, all `markdown` files are parsed for code blocks using [highlight.js](https://highlightjs.org/). There are [over 65 themes](https://highlightjs.org/static/demo/) to choose from. The import path for all `highlight.js` styles is included in the `build` process, so simply import the theme you want by name in your `SCSS/CSS` file, i.e.:
+
+```css
+@import 'github-gist';
+```
+
 See the [lodash.github.io](https://github.com/justinhelmer/lodash.github.io) project for an example implementation of `gh-release-manager`.
 
 #### grm-deploy(1)
