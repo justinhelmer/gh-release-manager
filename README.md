@@ -10,7 +10,7 @@ Download releases, generate documentation, build website, deploy, relax.
 The `GitHub Release Manager` automates the process of building a website and documenting `APIs` for any `GitHub` project. With a **_single command_**, you can run _any_ or _all_ of the following:
 
 1. Download all recent releases ([tags](https://developer.github.com/v3/git/tags/)) by fetching them via the [GitHub API](https://developer.github.com/v3/).
-2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a custom [JSDoc template](http://usejsdoc.org/about-configuring-default-template.html) for navigating any or all available releases.
+2. Parse the [JSDoc](http://usejsdoc.org/) documentation of all latest releases and generate a customizable template for navigating any or all available releases.
 3. Run a code quality check using [ESLint](http://eslint.org/docs/user-guide/getting-started), by simply creating an `ESLint` configuration file.
 4. Run any custom defined `test` routine by running [npm test](https://docs.npmjs.com/cli/test).
 5. Use [Metalsmith](http://www.metalsmith.io/) to build a full-fledged website from [markdown](https://github.com/chjj/marked) files, [handlebars](http://handlebarsjs.com/) templates, [libSass](http://sass-lang.com/libsass), and more.
@@ -189,7 +189,7 @@ $ grm download
 - If `[keep]` is not provided, `GRM` will store the downloaded files in a temporary directory that is deleted after success or failure.
 - If `[lib]` is not provided, `GRM` will assume the file to be stored is located at `[project root]/index.js`.
 - If `[repo]` is not provided, `GRM` will prompt for input in the format `[org/repo]`.
-- If `[top]` is not provided, `GRM` will fetch the default number of releases (determined by the `GitHub API`).
+- If `[top]` is not provided, `GRM` will fetch the top (most recent) release.
 
 > When specifying the [[top]](#top) option, be sure to consider that it identifies the _total_ number of releases to download, which are then filtered to only include stable releases.
 
@@ -435,7 +435,7 @@ _{string}_ The repository to fetch releases for (in the format `org/repo`) via t
  
 #### top
 
-_{number}_ The number of recent releases to fetch. Without specifying, will grab the default amount (determined by the `GitHub API`).
+_{number}_ The number of recent releases to fetch. Without specifying, will grab the most recent release (`top=1`).
 
 **used by:** [_download_](#grm-download1), [_release_](#grm-release1)
 
