@@ -182,12 +182,16 @@ $ grm download
 
 **available [options](#common-options):** [_opts_](#opts), [_keep_](#keep), [_lib_](#lib), [_quiet_](#quiet), [_repo_](#repo), [_top_](#top), [_verbose_](#verbose)
 
-The [[top]](#top) most recent releases are fetched from [[repo]](#repo), then the file located at [[lib]](#lib) (relative to the repo) is stored in [[keep]](#keep) (if provided).
+1. The [[top]](#top) most recent releases are fetched from [[repo]](#repo).
+2. The full set of releases is filtered to only include "stable" releases (in the format `/^[vV]?\d+\.\d+\.\d+$/`, i.e. `v1.0.0` or `1.0.0`).
+3. The files located at [[lib]](#lib) (relative to the repo) are stored in [[keep]](#keep) (if provided), each in a subdirectory named after the release (i.e. `[keep]/1.0.0`).
 
 - If `[keep]` is not provided, `GRM` will store the downloaded files in a temporary directory that is deleted after success or failure.
 - If `[lib]` is not provided, `GRM` will assume the file to be stored is located at `[project root]/index.js`.
 - If `[repo]` is not provided, `GRM` will prompt for input in the format `[org/repo]`.
 - If `[top]` is not provided, `GRM` will fetch the default number of releases (determined by the `GitHub API`).
+
+> When specifying the [[top]](#top) option, be sure to consider that it identifies the _total_ number of releases to download, which are then filtered to only include stable releases.
 
 #### grm-jsdoc(1)
 
@@ -434,6 +438,8 @@ _{string}_ The repository to fetch releases for (in the format `org/repo`) via t
 _{number}_ The number of recent releases to fetch. Without specifying, will grab the default amount (determined by the `GitHub API`).
 
 **used by:** [_download_](#grm-download1), [_release_](#grm-release1)
+
+> When specifying the [[top]](#top) option, be sure to consider that it identifies the _total_ number of releases to download, which are then filtered to only include [stable releases](#grm-download1).
 
 #### urlBase
 
